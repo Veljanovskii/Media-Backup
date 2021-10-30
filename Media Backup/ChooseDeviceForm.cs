@@ -31,8 +31,11 @@ namespace Media_Backup
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            Parent_Form.DataClass.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
-            this.Dispose();
+            if (cmb_devices.SelectedIndex != -1)
+            {
+                Parent_Form.DataClass.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
+                this.Dispose();
+            }
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)

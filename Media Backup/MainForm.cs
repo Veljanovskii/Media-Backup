@@ -43,7 +43,9 @@ namespace Media_Backup
 
             /*Choosing which device, if there are multiple*/
             ChooseDeviceForm form = new ChooseDeviceForm(this, Proxy.GetDevices());
-            form.ShowDialog();
+            var res = form.ShowDialog();
+            if (res == DialogResult.Cancel)
+                Environment.Exit(0);
             this.Text = DataClass.MediaDevice.FriendlyName;
 
             /*Accessing data from the device*/
