@@ -86,6 +86,7 @@ namespace Media_Backup
             this.Name = "ChooseDeviceForm";
             this.Text = "Detected devices";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChooseDeviceForm_FormClosing);
+            this.Load += new System.EventHandler(this.ChooseDeviceForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

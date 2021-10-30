@@ -8,29 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Media_Backup;
+using System.IO;
 
 namespace Media_Backup
 {
     public partial class MainForm : Form
     {
-        private String deviceName;
+        public DataClass DataClass { get; set; }
+        public HelperClass Proxy { get; set; }
+
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        public void SetDeviceName(String deviceName)
-        {
-            this.deviceName = deviceName;
+            DataClass = new DataClass();
+            Proxy = new HelperClass();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var proxy = new HelperClass();
-
             /*Device detection, otherwise project will not run*/
-            var devices = proxy.GetDevices();
-            while (devices.Count() == 0)
+            var deviceCount = Proxy.GetDevices().Count();
+            while (deviceCount == 0)
             {
                 var result = MessageBox.Show("No devices detected. Please plug in your device and try again.", "No active devices", MessageBoxButtons.RetryCancel);
                 if (result == DialogResult.Cancel)
@@ -39,21 +37,29 @@ namespace Media_Backup
                 }
                 else if (result == DialogResult.Retry)
                 {
-                    devices = proxy.GetDevices();
+                    deviceCount = Proxy.GetDevices().Count();
                 }
             }
 
             /*Choosing which device, if there are multiple*/
-            ChooseDeviceForm form = new ChooseDeviceForm();
-            for (int i = 0; i < devices.Count(); i++) 
-            {
-                form.cmb_devices.Items.Add(devices.ElementAt(i).FriendlyName);
-            }
+            ChooseDeviceForm form = new ChooseDeviceForm(this, Proxy.GetDevices());
             form.ShowDialog();
+            this.Text = DataClass.MediaDevice.FriendlyName;
 
-            this.deviceName = form.cmb_devices.SelectedItem.ToString();
-            this.Text = this.deviceName;
+            /*Accessing data from the device*/
+            DataClass.MediaDevice.Connect();
+            var photoDir = DataClass.MediaDevice.GetDirectoryInfo(@$"\Internal storage\DCIM\Camera");
+            var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories);
 
+            foreach(var file in files)
+            {
+                //sort 
+                MemoryStream memoryStream = new MemoryStream();
+                DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
+                memoryStream.Position = 0;
+            }
+
+            DataClass.MediaDevice.Disconnect();
         }
     }
 }
