@@ -7,5 +7,6 @@ namespace Media_Backup
     public class DataClass
     {
         public MediaDevices.MediaDevice MediaDevice { get; set; }
+        public String DestinationFolder { get; set; }
     }
 }

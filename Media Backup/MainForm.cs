@@ -51,11 +51,12 @@ namespace Media_Backup
             /*Accessing data from the device*/
             DataClass.MediaDevice.Connect();
             var photoDir = DataClass.MediaDevice.GetDirectoryInfo(@$"\Internal storage\DCIM\Camera");
-            var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories);
+            var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
+                .OrderBy(s => s.FullName)
+                .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
 
             foreach(var file in files)
             {
-                //sort 
                 MemoryStream memoryStream = new MemoryStream();
                 DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
                 memoryStream.Position = 0;

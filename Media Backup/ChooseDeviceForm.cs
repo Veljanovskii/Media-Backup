@@ -27,6 +27,9 @@ namespace Media_Backup
             {
                 this.cmb_devices.Items.Add(Devices.ElementAt(i).FriendlyName);
             }
+            lbl_folder_path.MaximumSize = new Size(320, 0);
+            lbl_folder_path.AutoSize = true;
+            lbl_folder_path.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
@@ -34,19 +37,31 @@ namespace Media_Backup
             if (cmb_devices.SelectedIndex != -1)
             {
                 Parent_Form.DataClass.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
+                Parent_Form.DataClass.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                this.DialogResult = DialogResult.OK;
                 this.Dispose();
             }
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Environment.Exit(0);
+        }
+
+        private void btn_folder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                Parent_Form.DataClass.DestinationFolder = fbd.SelectedPath;
+                lbl_folder_path.Text = fbd.SelectedPath;
+            }
         }
 
         private void ChooseDeviceForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason != 0) 
-                Application.Exit();
+                Environment.Exit(0);
         }
     }
 }
