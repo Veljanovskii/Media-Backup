@@ -37,7 +37,8 @@ namespace Media_Backup
             if (cmb_devices.SelectedIndex != -1)
             {
                 Parent_Form.DataClass.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
-                Parent_Form.DataClass.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                if (Parent_Form.DataClass.DestinationFolder == null) 
+                    Parent_Form.DataClass.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 this.DialogResult = DialogResult.OK;
                 this.Dispose();
             }

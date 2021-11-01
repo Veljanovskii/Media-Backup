@@ -15,19 +15,19 @@ namespace Media_Backup
     public partial class MainForm : Form
     {
         public DataClass DataClass { get; set; }
-        public HelperClass Proxy { get; set; }
+        public HelperClass HelperClass { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
             DataClass = new DataClass();
-            Proxy = new HelperClass();
+            HelperClass = new HelperClass();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             /*Device detection, otherwise project will not run*/
-            var deviceCount = Proxy.GetDevices().Count();
+            var deviceCount = HelperClass.GetDevices().Count();
             while (deviceCount == 0)
             {
                 var result = MessageBox.Show("No devices detected. Please plug in your device and try again.", "No active devices", MessageBoxButtons.RetryCancel);
@@ -37,12 +37,12 @@ namespace Media_Backup
                 }
                 else if (result == DialogResult.Retry)
                 {
-                    deviceCount = Proxy.GetDevices().Count();
+                    deviceCount = HelperClass.GetDevices().Count();
                 }
             }
 
             /*Choosing which device, if there are multiple*/
-            ChooseDeviceForm form = new ChooseDeviceForm(this, Proxy.GetDevices());
+            ChooseDeviceForm form = new ChooseDeviceForm(this, HelperClass.GetDevices());
             var res = form.ShowDialog();
             if (res == DialogResult.Cancel)
                 Environment.Exit(0);
@@ -60,8 +60,10 @@ namespace Media_Backup
                 MemoryStream memoryStream = new MemoryStream();
                 DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
                 memoryStream.Position = 0;
+                String filePath = $@"{DataClass.DestinationFolder}\{DataClass.MediaDevice.FriendlyName}";
+                Directory.CreateDirectory(filePath);
+                HelperClass.WriteStreamToDisc($@"{filePath}\{file.Name}", memoryStream);
             }
-
             DataClass.MediaDevice.Disconnect();
         }
     }
