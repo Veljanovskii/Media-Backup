@@ -16,6 +16,20 @@ namespace Media_Backup
             return MediaDevice.GetDevices();
         }
 
+        public bool FileExists(String rootPath, String fileName)
+        {
+            if (File.Exists(Path.Combine(rootPath, fileName)))
+                return true;
+
+            foreach (string subDir in Directory.GetDirectories(rootPath))
+            {
+                if (FileExists(subDir, fileName))
+                    return true;
+            }
+
+            return false;
+        }
+
         public void WriteStreamToDisc(String filePath, MemoryStream memoryStream)
         {
             using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))

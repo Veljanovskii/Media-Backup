@@ -55,16 +55,31 @@ namespace Media_Backup
                 .OrderBy(s => s.FullName)
                 .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
 
+            String folderPath = Path.Combine(DataClass.DestinationFolder, DataClass.MediaDevice.FriendlyName);
+            Directory.CreateDirectory(folderPath);      // if directory already exists, nothing happens
+            
             foreach(var file in files)
             {
-                MemoryStream memoryStream = new MemoryStream();
-                DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
-                memoryStream.Position = 0;
-                String filePath = $@"{DataClass.DestinationFolder}\{DataClass.MediaDevice.FriendlyName}";
-                Directory.CreateDirectory(filePath);
-                HelperClass.WriteStreamToDisc($@"{filePath}\{file.Name}", memoryStream);
+                if (!HelperClass.FileExists(folderPath, file.Name)) // file already exists
+                {
+                    MemoryStream memoryStream = new MemoryStream();
+                    DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
+                    memoryStream.Position = 0;
+                    String filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
+                    Directory.CreateDirectory(filePath);
+                    HelperClass.WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
+                }
             }
+
+            /*Image preview*/
+            var image = new Bitmap(Path.Combine(folderPath, files.ElementAt(1).LastWriteTime.Value.Year.ToString(), files.ElementAt(1).Name));
+            grb_preview.Width = image.Width / 8;
+            pcb_image.Width = image.Width / 8;
+            grb_preview.Height = image.Height / 8 + 100;
+            pcb_image.Height = image.Height / 8;
+            pcb_image.Image = image;
             DataClass.MediaDevice.Disconnect();
+            //maybe make form resizable
         }
     }
 }
