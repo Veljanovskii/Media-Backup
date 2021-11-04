@@ -8,5 +8,6 @@ namespace Media_Backup
     {
         public MediaDevices.MediaDevice MediaDevice { get; set; }
         public String DestinationFolder { get; set; }
+        public int NewFilesCount { get; set; }
     }
 }
