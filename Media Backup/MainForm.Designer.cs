@@ -36,6 +36,8 @@ namespace Media_Backup
             this.btn_right = new System.Windows.Forms.Button();
             this.pcb_image = new System.Windows.Forms.PictureBox();
             this.lbl_count = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
             this.SuspendLayout();
@@ -108,11 +110,29 @@ namespace Media_Backup
             this.lbl_count.TabIndex = 2;
             this.lbl_count.Text = "label1";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(631, 185);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(125, 27);
+            this.textBox1.TabIndex = 3;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(604, 263);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 29);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(887, 704);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.lbl_count);
             this.Controls.Add(this.grb_preview);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -127,13 +147,15 @@ namespace Media_Backup
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox grb_preview;
-        private System.Windows.Forms.PictureBox pcb_image;
         private System.Windows.Forms.Label lbl_count;
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Button btn_end;
         private System.Windows.Forms.Button btn_left;
         private System.Windows.Forms.Button btn_right;
+        public System.Windows.Forms.GroupBox grb_preview;
+        public System.Windows.Forms.PictureBox pcb_image;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

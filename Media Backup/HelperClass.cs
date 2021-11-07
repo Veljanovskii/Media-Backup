@@ -1,6 +1,7 @@
 ﻿using MediaDevices;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -39,6 +40,17 @@ namespace Media_Backup
                 file.Write(bytes, 0, bytes.Length);
                 memoryStream.Close();
             }
+        }
+
+        public void ImagePreview(MainForm form)
+        {
+            var image = new Bitmap(Path.Combine(form.DataClass.DestinationFolder, form.DataClass.MediaDevice.FriendlyName, form.DataClass.NewFiles.ElementAt(form.DataClass.ImageIndex).LastWriteTime.Value.Year.ToString(), form.DataClass.NewFiles.ElementAt(form.DataClass.ImageIndex).Name));
+            //grb_preview.Width = image.Width / 8;
+            form.pcb_image.Width = image.Width / 8;
+            //grb_preview.Height = image.Height / 8 + 100;
+            form.pcb_image.Height = image.Height / 8;
+            form.pcb_image.Image = image;
+            //maybe make form resizable
         }
     }
 }

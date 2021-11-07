@@ -57,17 +57,17 @@ namespace Media_Backup
 
             String folderPath = Path.Combine(DataClass.DestinationFolder, DataClass.MediaDevice.FriendlyName);
             Directory.CreateDirectory(folderPath);      // if directory already exists, nothing happens
-            IList<MediaDevices.MediaFileInfo> newFiles = new List<MediaDevices.MediaFileInfo>();
 
             foreach(var file in files)
             {
                 if (!HelperClass.FileExists(folderPath, file.Name)) // file already exists
                 {
-                    newFiles.Add(file);
+                    DataClass.NewFiles.Add(file);
+                    //idea: local files = newfiles.fullpath
                 }
             }
                         
-            foreach(var file in newFiles)
+            foreach(var file in DataClass.NewFiles)
             {
                 MemoryStream memoryStream = new MemoryStream();
                 DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
@@ -78,31 +78,25 @@ namespace Media_Backup
             }
 
             /*Image preview*/
-            DataClass.NewFilesCount = newFiles.Count;
-            if (newFiles.Count == 0)
+            if (DataClass.NewFiles.Count == 0)
             {
-                lbl_count.Text = @$"There are {newFiles.Count} new files detected.";
+                lbl_count.Text = @$"There are {DataClass.NewFiles.Count} new files detected.";
             }
             else
             {
-                if (newFiles.Count == 1)
+                if (DataClass.NewFiles.Count == 1)
                 {
-                    lbl_count.Text = @$"There is {newFiles.Count} new file detected.";
+                    lbl_count.Text = @$"There is {DataClass.NewFiles.Count} new file detected.";
                 }
                 else
                 {
-                    lbl_count.Text = @$"There are {newFiles.Count} new files detected.";
+                    lbl_count.Text = @$"There are {DataClass.NewFiles.Count} new files detected.";
                 }
-
-                var image = new Bitmap(Path.Combine(folderPath, newFiles.ElementAt(0).LastWriteTime.Value.Year.ToString(), newFiles.ElementAt(0).Name));
-                //grb_preview.Width = image.Width / 8;
-                pcb_image.Width = image.Width / 8;
-                //grb_preview.Height = image.Height / 8 + 100;
-                pcb_image.Height = image.Height / 8;
-                pcb_image.Image = image;
-                DataClass.MediaDevice.Disconnect();
-                //maybe make form resizable
+                DataClass.ImageIndex = 0;
+                HelperClass.ImagePreview(this);                
             }
+
+            DataClass.MediaDevice.Disconnect();
         }
     }
 }
