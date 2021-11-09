@@ -8,6 +8,7 @@ namespace Media_Backup
     {
         public MediaDevices.MediaDevice MediaDevice { get; set; }
         public String DestinationFolder { get; set; }
+        public bool Metafiles { get; set; }
         public IList<MediaDevices.MediaFileInfo> NewFiles;
         public int ImageIndex { get; set; }
 

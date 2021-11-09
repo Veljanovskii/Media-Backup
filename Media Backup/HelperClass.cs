@@ -44,6 +44,7 @@ namespace Media_Backup
 
         public void ImagePreview(MainForm form)
         {
+            //var image = new Bitmap(@$"This PC\HUAWEI P smart 2019\Internal storage\DCIM\Camera\IMG_20200220_140911.jpg");
             var image = new Bitmap(Path.Combine(form.DataClass.DestinationFolder, form.DataClass.MediaDevice.FriendlyName, form.DataClass.NewFiles.ElementAt(form.DataClass.ImageIndex).LastWriteTime.Value.Year.ToString(), form.DataClass.NewFiles.ElementAt(form.DataClass.ImageIndex).Name));
             //grb_preview.Width = image.Width / 8;
             form.pcb_image.Width = image.Width / 8;

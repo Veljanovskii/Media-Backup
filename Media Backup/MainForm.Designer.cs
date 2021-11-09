@@ -38,8 +38,12 @@ namespace Media_Backup
             this.lbl_count = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.grb_source = new System.Windows.Forms.GroupBox();
+            this.lbl_source_path = new System.Windows.Forms.Label();
+            this.btn_source = new System.Windows.Forms.Button();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
+            this.grb_source.SuspendLayout();
             this.SuspendLayout();
             // 
             // grb_preview
@@ -54,7 +58,7 @@ namespace Media_Backup
             this.grb_preview.Size = new System.Drawing.Size(532, 608);
             this.grb_preview.TabIndex = 1;
             this.grb_preview.TabStop = false;
-            this.grb_preview.Text = "Picture preview";
+            this.grb_preview.Text = "Media preview";
             // 
             // btn_start
             // 
@@ -112,25 +116,56 @@ namespace Media_Backup
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(631, 185);
+            this.textBox1.Location = new System.Drawing.Point(684, 320);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(125, 27);
             this.textBox1.TabIndex = 3;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(604, 263);
+            this.button1.Location = new System.Drawing.Point(606, 378);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 29);
             this.button1.TabIndex = 4;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // grb_source
+            // 
+            this.grb_source.Controls.Add(this.lbl_source_path);
+            this.grb_source.Controls.Add(this.btn_source);
+            this.grb_source.Location = new System.Drawing.Point(589, 103);
+            this.grb_source.Name = "grb_source";
+            this.grb_source.Size = new System.Drawing.Size(316, 125);
+            this.grb_source.TabIndex = 5;
+            this.grb_source.TabStop = false;
+            this.grb_source.Text = "Source path";
+            // 
+            // lbl_source_path
+            // 
+            this.lbl_source_path.AutoSize = true;
+            this.lbl_source_path.Location = new System.Drawing.Point(17, 44);
+            this.lbl_source_path.Name = "lbl_source_path";
+            this.lbl_source_path.Size = new System.Drawing.Size(50, 20);
+            this.lbl_source_path.TabIndex = 1;
+            this.lbl_source_path.Text = "label1";
+            // 
+            // btn_source
+            // 
+            this.btn_source.Location = new System.Drawing.Point(17, 90);
+            this.btn_source.Name = "btn_source";
+            this.btn_source.Size = new System.Drawing.Size(94, 29);
+            this.btn_source.TabIndex = 0;
+            this.btn_source.Text = "Change";
+            this.btn_source.UseVisualStyleBackColor = true;
+            this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(887, 704);
+            this.ClientSize = new System.Drawing.Size(920, 704);
+            this.Controls.Add(this.grb_source);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.lbl_count);
@@ -138,9 +173,12 @@ namespace Media_Backup
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "Media Backup";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.grb_preview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).EndInit();
+            this.grb_source.ResumeLayout(false);
+            this.grb_source.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,6 +194,9 @@ namespace Media_Backup
         public System.Windows.Forms.PictureBox pcb_image;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox grb_source;
+        private System.Windows.Forms.Button btn_source;
+        private System.Windows.Forms.Label lbl_source_path;
     }
 }
 

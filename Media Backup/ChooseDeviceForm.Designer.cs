@@ -38,6 +38,7 @@ namespace Media_Backup
             this.lbl_folder_path = new System.Windows.Forms.Label();
             this.grb_device = new System.Windows.Forms.GroupBox();
             this.grb_folder = new System.Windows.Forms.GroupBox();
+            this.chb_metafiles = new System.Windows.Forms.CheckBox();
             this.grb_device.SuspendLayout();
             this.grb_folder.SuspendLayout();
             this.SuspendLayout();
@@ -61,7 +62,7 @@ namespace Media_Backup
             // 
             // btn_ok
             // 
-            this.btn_ok.Location = new System.Drawing.Point(12, 343);
+            this.btn_ok.Location = new System.Drawing.Point(12, 396);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(94, 29);
             this.btn_ok.TabIndex = 2;
@@ -71,7 +72,7 @@ namespace Media_Backup
             // 
             // btn_cancel
             // 
-            this.btn_cancel.Location = new System.Drawing.Point(125, 343);
+            this.btn_cancel.Location = new System.Drawing.Point(125, 396);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(94, 29);
             this.btn_cancel.TabIndex = 3;
@@ -130,11 +131,22 @@ namespace Media_Backup
             this.grb_folder.TabStop = false;
             this.grb_folder.Text = "Destination folder";
             // 
+            // chb_metafiles
+            // 
+            this.chb_metafiles.AutoSize = true;
+            this.chb_metafiles.Location = new System.Drawing.Point(36, 349);
+            this.chb_metafiles.Name = "chb_metafiles";
+            this.chb_metafiles.Size = new System.Drawing.Size(162, 24);
+            this.chb_metafiles.TabIndex = 9;
+            this.chb_metafiles.Text = "Work with metafiles";
+            this.chb_metafiles.UseVisualStyleBackColor = true;
+            // 
             // ChooseDeviceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 391);
+            this.ClientSize = new System.Drawing.Size(374, 437);
+            this.Controls.Add(this.chb_metafiles);
             this.Controls.Add(this.grb_folder);
             this.Controls.Add(this.grb_device);
             this.Controls.Add(this.btn_cancel);
@@ -150,6 +162,7 @@ namespace Media_Backup
             this.grb_folder.ResumeLayout(false);
             this.grb_folder.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -163,5 +176,6 @@ namespace Media_Backup
         private System.Windows.Forms.Label lbl_folder_path;
         private System.Windows.Forms.GroupBox grb_device;
         private System.Windows.Forms.GroupBox grb_folder;
+        private System.Windows.Forms.CheckBox chb_metafiles;
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Media_Backup;
 using System.IO;
+using Shell32;
 
 namespace Media_Backup
 {
@@ -58,7 +59,7 @@ namespace Media_Backup
             String folderPath = Path.Combine(DataClass.DestinationFolder, DataClass.MediaDevice.FriendlyName);
             Directory.CreateDirectory(folderPath);      // if directory already exists, nothing happens
 
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 if (!HelperClass.FileExists(folderPath, file.Name)) // file already exists
                 {
@@ -66,8 +67,8 @@ namespace Media_Backup
                     //idea: local files = newfiles.fullpath
                 }
             }
-                        
-            foreach(var file in DataClass.NewFiles)
+
+            foreach (var file in DataClass.NewFiles)
             {
                 MemoryStream memoryStream = new MemoryStream();
                 DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
@@ -93,9 +94,25 @@ namespace Media_Backup
                     lbl_count.Text = @$"There are {DataClass.NewFiles.Count} new files detected.";
                 }
                 DataClass.ImageIndex = 0;
-                HelperClass.ImagePreview(this);                
+                HelperClass.ImagePreview(this);
             }
 
+            //DataClass.MediaDevice.Disconnect();
+        }
+
+        private void btn_source_Click(object sender, EventArgs e)
+        {
+            Shell shell = new Shell();
+            Folder folder = shell.BrowseForFolder(0, "Choose source folder", 0, 0);
+            if (folder != null)
+            {
+                FolderItem fi = (folder as Folder3).Self;
+                var path = fi.Path;
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
             DataClass.MediaDevice.Disconnect();
         }
     }
