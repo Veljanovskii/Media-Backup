@@ -23,6 +23,21 @@ namespace Media_Backup
 
         private void ChooseDeviceForm_Load(object sender, EventArgs e)
         {
+            /*Device detection, otherwise application will not run*/
+            while (Devices.Count() == 0)
+            {
+                var result = MessageBox.Show("No devices detected. Please plug in your device and try again.", "No active devices", MessageBoxButtons.RetryCancel);
+                if (result == DialogResult.Cancel)
+                {
+                    Application.Exit();
+                }
+                else if (result == DialogResult.Retry)
+                {
+                    Devices = Parent_Form.proxy.GetDevices();
+                }
+            }
+
+            /*Setting up Combobox*/
             for (int i = 0; i < Devices.Count(); i++)
             {
                 this.cmb_devices.Items.Add(Devices.ElementAt(i).FriendlyName);
@@ -37,14 +52,14 @@ namespace Media_Backup
         {
             if (cmb_devices.SelectedIndex != -1)
             {
-                Parent_Form.DataClass.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
-                if (Parent_Form.DataClass.DestinationFolder == null) 
-                    Parent_Form.DataClass.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Parent_Form.proxy.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
+                if (Parent_Form.proxy.DestinationFolder == null) 
+                    Parent_Form.proxy.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
                 if (chb_metafiles.Checked)
-                    Parent_Form.DataClass.Metafiles = true;
+                    Parent_Form.proxy.Metafiles = true;
                 else
-                    Parent_Form.DataClass.Metafiles = false;
+                    Parent_Form.proxy.Metafiles = false;
 
                 this.DialogResult = DialogResult.OK;
                 this.Dispose();
@@ -61,7 +76,7 @@ namespace Media_Backup
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                Parent_Form.DataClass.DestinationFolder = fbd.SelectedPath;
+                Parent_Form.proxy.DestinationFolder = fbd.SelectedPath;
                 lbl_folder_path.Text = fbd.SelectedPath;
             }
         }

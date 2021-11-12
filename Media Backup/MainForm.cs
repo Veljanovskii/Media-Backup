@@ -15,86 +15,43 @@ namespace Media_Backup
 {
     public partial class MainForm : Form
     {
-        public DataClass DataClass { get; set; }
-        public HelperClass HelperClass { get; set; }
+        public DataClass proxy { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
-            DataClass = new DataClass();
-            HelperClass = new HelperClass();
+            proxy = new DataClass();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {
-            /*Device detection, otherwise project will not run*/
-            var deviceCount = HelperClass.GetDevices().Count();
-            while (deviceCount == 0)
-            {
-                var result = MessageBox.Show("No devices detected. Please plug in your device and try again.", "No active devices", MessageBoxButtons.RetryCancel);
-                if (result == DialogResult.Cancel)
-                {
-                    Application.Exit();
-                }
-                else if (result == DialogResult.Retry)
-                {
-                    deviceCount = HelperClass.GetDevices().Count();
-                }
-            }
-
+        {            
             /*Choosing which device, if there are multiple*/
-            ChooseDeviceForm form = new ChooseDeviceForm(this, HelperClass.GetDevices());
+            ChooseDeviceForm form = new ChooseDeviceForm(this, proxy.GetDevices());
             var res = form.ShowDialog();
             if (res == DialogResult.Cancel)
                 Environment.Exit(0);
-            this.Text = DataClass.MediaDevice.FriendlyName;
+            this.Text = proxy.MediaDevice.FriendlyName;
 
             /*Accessing data from the device*/
-            DataClass.MediaDevice.Connect();
-            var photoDir = DataClass.MediaDevice.GetDirectoryInfo(@$"\Internal storage\DCIM\Camera");
-            var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
-                .OrderBy(s => s.FullName)
-                .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
-
-            String folderPath = Path.Combine(DataClass.DestinationFolder, DataClass.MediaDevice.FriendlyName);
-            Directory.CreateDirectory(folderPath);      // if directory already exists, nothing happens
-
-            foreach (var file in files)
-            {
-                if (!HelperClass.FileExists(folderPath, file.Name)) // file already exists
-                {
-                    DataClass.NewFiles.Add(file);
-                    //idea: local files = newfiles.fullpath
-                }
-            }
-
-            foreach (var file in DataClass.NewFiles)
-            {
-                MemoryStream memoryStream = new MemoryStream();
-                DataClass.MediaDevice.DownloadFile(file.FullName, memoryStream);
-                memoryStream.Position = 0;
-                String filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
-                Directory.CreateDirectory(filePath);
-                HelperClass.WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
-            }
+            proxy.TransferMedia();
 
             /*Image preview*/
-            if (DataClass.NewFiles.Count == 0)
+            if (proxy.NewFiles.Count == 0)
             {
-                lbl_count.Text = @$"There are {DataClass.NewFiles.Count} new files detected.";
+                lbl_count.Text = @$"There are {proxy.NewFiles.Count} new files detected.";
             }
             else
             {
-                if (DataClass.NewFiles.Count == 1)
+                if (proxy.NewFiles.Count == 1)
                 {
-                    lbl_count.Text = @$"There is {DataClass.NewFiles.Count} new file detected.";
+                    lbl_count.Text = @$"There is {proxy.NewFiles.Count} new file detected.";
                 }
                 else
                 {
-                    lbl_count.Text = @$"There are {DataClass.NewFiles.Count} new files detected.";
+                    lbl_count.Text = @$"There are {proxy.NewFiles.Count} new files detected.";
                 }
-                DataClass.ImageIndex = 0;
-                HelperClass.ImagePreview(this);
+                proxy.ImageIndex = 0;
+                proxy.ImagePreview(this);
             }
 
             //DataClass.MediaDevice.Disconnect();
@@ -106,6 +63,7 @@ namespace Media_Backup
             Folder folder = shell.BrowseForFolder(0, "Choose source folder", 0, 0);
             if (folder != null)
             {
+                var lol = folder.ParentFolder.Title;
                 FolderItem fi = (folder as Folder3).Self;
                 var path = fi.Path;
             }
@@ -113,7 +71,7 @@ namespace Media_Backup
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DataClass.MediaDevice.Disconnect();
+            proxy.MediaDevice.Disconnect();
         }
     }
 }
