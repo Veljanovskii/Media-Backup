@@ -13,17 +13,22 @@ namespace Media_Backup
         public ProgressBarForm()
         {
             InitializeComponent();
-            this.ControlBox = false;
         }
 
-        private void ProgressBarForm_Load(object sender, EventArgs e)
+        public void SetProgress(int progress)
         {
-            pgb_bar.Maximum = 1000000;
-            pgb_bar.Minimum = 0;
-            pgb_bar.Step = 1;
-            pgb_bar.Style = ProgressBarStyle.Blocks;
-            for (int i = 0; i < 1000000; i++)
-                pgb_bar.Value = i;
+            pgb_bar.Value = progress;
+        }
+
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Media_Backup
 {
@@ -73,6 +74,15 @@ namespace Media_Backup
                 }
             }
 
+            /*Progress bar*/
+            ProgressBarForm BarForm = new ProgressBarForm();
+            BarForm.Text = "Transferring...";
+            BarForm.pgb_bar.Minimum = 0;
+            BarForm.pgb_bar.Maximum = NewFiles.Count;
+            BarForm.pgb_bar.Style = ProgressBarStyle.Blocks;
+            BarForm.Show();
+            int progress = 1;
+
             foreach (var file in NewFiles)
             {
                 MemoryStream memoryStream = new MemoryStream();
@@ -81,12 +91,11 @@ namespace Media_Backup
                 String filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
                 Directory.CreateDirectory(filePath);
                 WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
-            }
 
-            /*Progress bar*/
-            ProgressBarForm progressBarForm = new ProgressBarForm();
-            //progressBarForm.ShowDialog();
-            //progressBarForm.Close();
+                BarForm.SetProgress(progress++);
+                BarForm.lbl_progress.Text = @$"Transferring...{progress}/{NewFiles.Count} ({((double)progress/NewFiles.Count).ToString("0.00")}%)";
+            }
+            BarForm.Close();
         }
 
         public void ImagePreview(MainForm form)

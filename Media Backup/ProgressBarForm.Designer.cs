@@ -30,6 +30,7 @@ namespace Media_Backup
         private void InitializeComponent()
         {
             this.pgb_bar = new System.Windows.Forms.ProgressBar();
+            this.lbl_progress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // pgb_bar
@@ -39,25 +40,33 @@ namespace Media_Backup
             this.pgb_bar.Size = new System.Drawing.Size(243, 29);
             this.pgb_bar.TabIndex = 0;
             // 
+            // lbl_progress
+            // 
+            this.lbl_progress.AutoSize = true;
+            this.lbl_progress.Location = new System.Drawing.Point(64, 22);
+            this.lbl_progress.Name = "lbl_progress";
+            this.lbl_progress.Size = new System.Drawing.Size(50, 20);
+            this.lbl_progress.TabIndex = 1;
+            this.lbl_progress.Text = "label1";
+            // 
             // ProgressBarForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(367, 116);
+            this.Controls.Add(this.lbl_progress);
             this.Controls.Add(this.pgb_bar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "ProgressBarForm";
-            this.ShowInTaskbar = false;
-            this.Text = "Transfering...";
-            this.Load += new System.EventHandler(this.ProgressBarForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ProgressBar pgb_bar;
+        public System.Windows.Forms.ProgressBar pgb_bar;
+        public System.Windows.Forms.Label lbl_progress;
     }
 }
