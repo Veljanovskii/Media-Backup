@@ -57,9 +57,9 @@ namespace Media_Backup
                     Parent_Form.proxy.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
                 if (chb_metafiles.Checked)
-                    Parent_Form.proxy.Metafiles = true;
+                    Parent_Form.proxy.Metadata = true;
                 else
-                    Parent_Form.proxy.Metafiles = false;
+                    Parent_Form.proxy.Metadata = false;
 
                 this.DialogResult = DialogResult.OK;
                 this.Dispose();

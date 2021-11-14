@@ -13,7 +13,7 @@ namespace Media_Backup
     {
         public MediaDevices.MediaDevice MediaDevice { get; set; }
         public String DestinationFolder { get; set; }
-        public bool Metafiles { get; set; }
+        public bool Metadata { get; set; }
         public IList<MediaDevices.MediaFileInfo> NewFiles { get; set; }
         public int ImageIndex { get; set; }
 
@@ -88,14 +88,27 @@ namespace Media_Backup
                 MemoryStream memoryStream = new MemoryStream();
                 MediaDevice.DownloadFile(file.FullName, memoryStream);
                 memoryStream.Position = 0;
-                String filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
+                String filePath;
+                if (Metadata == true)
+                {
+                    filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
+                }
+                else
+                {
+                    filePath = Path.Combine(folderPath, ExtractYear(file));
+                }
                 Directory.CreateDirectory(filePath);
                 WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
 
                 BarForm.SetProgress(progress++);
-                BarForm.lbl_progress.Text = @$"Transferring...{progress}/{NewFiles.Count} ({((double)progress/NewFiles.Count).ToString("0.00")}%)";
+                BarForm.lbl_progress.Text = @$"Transferring...{progress}/{NewFiles.Count} ({Math.Round((double)progress / NewFiles.Count * 100)}%)";
             }
             BarForm.Close();
+        }
+
+        private string ExtractYear(MediaFileInfo file)
+        {
+            return file.Name.Substring(4, 4);       // starting index 4, length 4
         }
 
         public void ImagePreview(MainForm form)

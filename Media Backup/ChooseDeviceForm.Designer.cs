@@ -136,9 +136,9 @@ namespace Media_Backup
             this.chb_metafiles.AutoSize = true;
             this.chb_metafiles.Location = new System.Drawing.Point(36, 349);
             this.chb_metafiles.Name = "chb_metafiles";
-            this.chb_metafiles.Size = new System.Drawing.Size(162, 24);
+            this.chb_metafiles.Size = new System.Drawing.Size(123, 24);
             this.chb_metafiles.TabIndex = 9;
-            this.chb_metafiles.Text = "Work with metafiles";
+            this.chb_metafiles.Text = "Use metadata";
             this.chb_metafiles.UseVisualStyleBackColor = true;
             // 
             // ChooseDeviceForm
