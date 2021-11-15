@@ -66,7 +66,7 @@ namespace Media_Backup
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(94, 29);
             this.btn_ok.TabIndex = 2;
-            this.btn_ok.Text = "OK";
+            this.btn_ok.Text = "Proceed";
             this.btn_ok.UseVisualStyleBackColor = true;
             this.btn_ok.Click += new System.EventHandler(this.btn_ok_Click);
             // 

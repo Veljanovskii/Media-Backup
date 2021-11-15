@@ -15,12 +15,13 @@ namespace Media_Backup
         public String DestinationFolder { get; set; }
         public bool Metadata { get; set; }
         public IList<MediaDevices.MediaFileInfo> NewFiles { get; set; }
-        public int ImageIndex { get; set; }
+        public int MediaIndex { get; set; }
 
 
         public DataClass()
         {
             NewFiles = new List<MediaDevices.MediaFileInfo>();
+            MediaIndex = 0;
         }
 
         public IEnumerable<MediaDevice> GetDevices()
@@ -111,16 +112,77 @@ namespace Media_Backup
             return file.Name.Substring(4, 4);       // starting index 4, length 4
         }
 
-        public void ImagePreview(MainForm form)
+        public void MediaPreview(MainForm form)
         {
+            /*Image preview*/
+            if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
+            {
+                /*Retrieve image*/
+                Bitmap image;
+                if (Metadata == true) 
+                   image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name));
+                else
+                   image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name));
+
+                form.grb_preview.Location = new Point(12, 12);
+                form.grb_preview.Visible = true;
+                form.pcb_image.Location = new Point(6, 36);
+                form.pcb_image.Visible = true;
+                
+                if (image.Width == 4160)
+                {
+                    form.grb_preview.Size = new Size(532, 518);
+                    form.pcb_image.Size = new Size(520, 390);
+
+                    /*Buttons settings*/
+                    form.btn_start.Location = new Point(172, 450);
+                    form.btn_left.Location = new Point(215, 450);
+                    form.btn_right.Location = new Point(271, 450);
+                    form.btn_end.Location = new Point(314, 450);
+
+                    form.pcb_image.Image = image;
+
+                }
+                else if (image.Width == 3120)
+                {
+                    form.grb_preview.Size = new Size(402, 648);
+                    form.pcb_image.Size = new Size(390, 520);
+
+                    /*Buttons settings*/
+                    form.btn_start.Location = new Point(112, 600);
+                    form.btn_left.Location = new Point(165, 600);
+                    form.btn_right.Location = new Point(221, 600);
+                    form.btn_end.Location = new Point(264, 600);
+
+                    form.pcb_image.Image = image;
+                }
+
+            }
+            else if(NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
+            {
+
+            }
+
+            
+
+            if (NewFiles.Count == 0)
+            {
+                form.lbl_count.Text = @$"There are 0 new files detected.";
+            }
+            else
+            {
+                if (NewFiles.Count == 1)
+                {
+                    form.lbl_count.Text = @$"There is 1 new file detected.";
+                }
+                else
+                {
+                    form.lbl_count.Text = @$"There are {NewFiles.Count} new files detected.";
+                }
+            }
+
             //var image = new Bitmap(@$"This PC\HUAWEI P smart 2019\Internal storage\DCIM\Camera\IMG_20200220_140911.jpg");
-            var image = new Bitmap(Path.Combine(form.proxy.DestinationFolder, form.proxy.MediaDevice.FriendlyName, form.proxy.NewFiles.ElementAt(form.proxy.ImageIndex).LastWriteTime.Value.Year.ToString(), form.proxy.NewFiles.ElementAt(form.proxy.ImageIndex).Name));
-            //grb_preview.Width = image.Width / 8;
-            form.pcb_image.Width = image.Width / 8;
-            //grb_preview.Height = image.Height / 8 + 100;
-            form.pcb_image.Height = image.Height / 8;
-            form.pcb_image.Image = image;
-            //maybe make form resizable
+            
         }
     }
 }

@@ -35,24 +35,8 @@ namespace Media_Backup
             /*Accessing data from the device*/
             proxy.TransferMedia();
 
-            /*Image preview*/
-            if (proxy.NewFiles.Count == 0)
-            {
-                lbl_count.Text = @$"There are {proxy.NewFiles.Count} new files detected.";
-            }
-            else
-            {
-                if (proxy.NewFiles.Count == 1)
-                {
-                    lbl_count.Text = @$"There is {proxy.NewFiles.Count} new file detected.";
-                }
-                else
-                {
-                    lbl_count.Text = @$"There are {proxy.NewFiles.Count} new files detected.";
-                }
-                proxy.ImageIndex = 0;
-                proxy.ImagePreview(this);
-            }
+            /*Media preview*/            
+            proxy.MediaPreview(this);
 
             //DataClass.MediaDevice.Disconnect();
         }
@@ -71,6 +55,36 @@ namespace Media_Backup
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             proxy.MediaDevice.Disconnect();
+        }
+
+        private void btn_right_Click(object sender, EventArgs e)
+        {
+            if (proxy.MediaIndex < proxy.NewFiles.Count - 1)
+            {
+                proxy.MediaIndex++;
+                proxy.MediaPreview(this);
+            }
+        }
+
+        private void btn_left_Click(object sender, EventArgs e)
+        {
+            if (proxy.MediaIndex > 0)
+            {
+                proxy.MediaIndex--;
+                proxy.MediaPreview(this);
+            }
+        }
+
+        private void btn_end_Click(object sender, EventArgs e)
+        {
+            proxy.MediaIndex = proxy.NewFiles.Count - 1;
+            proxy.MediaPreview(this);
+        }
+
+        private void btn_start_Click(object sender, EventArgs e)
+        {
+            proxy.MediaIndex = 0;
+            proxy.MediaPreview(this);
         }
     }
 }
