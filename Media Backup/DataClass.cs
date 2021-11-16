@@ -12,8 +12,9 @@ namespace Media_Backup
     public class DataClass
     {
         public MediaDevices.MediaDevice MediaDevice { get; set; }
+        public String SourceFolder { get; set; }
         public String DestinationFolder { get; set; }
-        public bool Metadata { get; set; }
+        public bool UseFileName { get; set; }
         public IList<MediaDevices.MediaFileInfo> NewFiles { get; set; }
         public int MediaIndex { get; set; }
 
@@ -58,7 +59,7 @@ namespace Media_Backup
         {
             /*Accessing data from the device*/
             MediaDevice.Connect();
-            var photoDir = MediaDevice.GetDirectoryInfo(@$"\Internal storage\DCIM\Camera");
+            var photoDir = MediaDevice.GetDirectoryInfo(SourceFolder);
             var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
                 .OrderBy(s => s.FullName)
                 .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
@@ -90,13 +91,13 @@ namespace Media_Backup
                 MediaDevice.DownloadFile(file.FullName, memoryStream);
                 memoryStream.Position = 0;
                 String filePath;
-                if (Metadata == true)
+                if (UseFileName == true)
                 {
-                    filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
+                    filePath = Path.Combine(folderPath, ExtractYear(file));
                 }
                 else
                 {
-                    filePath = Path.Combine(folderPath, ExtractYear(file));
+                    filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
                 }
                 Directory.CreateDirectory(filePath);
                 WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
@@ -119,10 +120,10 @@ namespace Media_Backup
             {
                 /*Retrieve image*/
                 Bitmap image;
-                if (Metadata == true) 
-                   image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name));
-                else
+                if (UseFileName == true) 
                    image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name));
+                else
+                   image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name));
 
                 form.grb_preview.Location = new Point(12, 12);
                 form.grb_preview.Visible = true;

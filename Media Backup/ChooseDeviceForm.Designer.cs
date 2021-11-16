@@ -33,14 +33,19 @@ namespace Media_Backup
             this.lbl_device = new System.Windows.Forms.Label();
             this.btn_ok = new System.Windows.Forms.Button();
             this.btn_cancel = new System.Windows.Forms.Button();
-            this.lbl_folder_text = new System.Windows.Forms.Label();
-            this.btn_folder = new System.Windows.Forms.Button();
-            this.lbl_folder_path = new System.Windows.Forms.Label();
+            this.lbl_dest_text = new System.Windows.Forms.Label();
+            this.btn_dest = new System.Windows.Forms.Button();
+            this.lbl_dest_path = new System.Windows.Forms.Label();
             this.grb_device = new System.Windows.Forms.GroupBox();
-            this.grb_folder = new System.Windows.Forms.GroupBox();
+            this.grb_dest = new System.Windows.Forms.GroupBox();
             this.chb_metafiles = new System.Windows.Forms.CheckBox();
+            this.grb_source = new System.Windows.Forms.GroupBox();
+            this.lbl_source_text = new System.Windows.Forms.Label();
+            this.lbl_source_path = new System.Windows.Forms.Label();
+            this.btn_source = new System.Windows.Forms.Button();
             this.grb_device.SuspendLayout();
-            this.grb_folder.SuspendLayout();
+            this.grb_dest.SuspendLayout();
+            this.grb_source.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmb_devices
@@ -62,7 +67,7 @@ namespace Media_Backup
             // 
             // btn_ok
             // 
-            this.btn_ok.Location = new System.Drawing.Point(12, 396);
+            this.btn_ok.Location = new System.Drawing.Point(12, 526);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(94, 29);
             this.btn_ok.TabIndex = 2;
@@ -72,7 +77,7 @@ namespace Media_Backup
             // 
             // btn_cancel
             // 
-            this.btn_cancel.Location = new System.Drawing.Point(125, 396);
+            this.btn_cancel.Location = new System.Drawing.Point(125, 526);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(94, 29);
             this.btn_cancel.TabIndex = 3;
@@ -80,33 +85,33 @@ namespace Media_Backup
             this.btn_cancel.UseVisualStyleBackColor = true;
             this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
-            // lbl_folder_text
+            // lbl_dest_text
             // 
-            this.lbl_folder_text.AutoSize = true;
-            this.lbl_folder_text.Location = new System.Drawing.Point(24, 37);
-            this.lbl_folder_text.Name = "lbl_folder_text";
-            this.lbl_folder_text.Size = new System.Drawing.Size(183, 20);
-            this.lbl_folder_text.TabIndex = 4;
-            this.lbl_folder_text.Text = "Choose destination folder:";
+            this.lbl_dest_text.AutoSize = true;
+            this.lbl_dest_text.Location = new System.Drawing.Point(24, 37);
+            this.lbl_dest_text.Name = "lbl_dest_text";
+            this.lbl_dest_text.Size = new System.Drawing.Size(183, 20);
+            this.lbl_dest_text.TabIndex = 4;
+            this.lbl_dest_text.Text = "Choose destination folder:";
             // 
-            // btn_folder
+            // btn_dest
             // 
-            this.btn_folder.Location = new System.Drawing.Point(223, 33);
-            this.btn_folder.Name = "btn_folder";
-            this.btn_folder.Size = new System.Drawing.Size(94, 29);
-            this.btn_folder.TabIndex = 5;
-            this.btn_folder.Text = "Change";
-            this.btn_folder.UseVisualStyleBackColor = true;
-            this.btn_folder.Click += new System.EventHandler(this.btn_folder_Click);
+            this.btn_dest.Location = new System.Drawing.Point(223, 33);
+            this.btn_dest.Name = "btn_dest";
+            this.btn_dest.Size = new System.Drawing.Size(94, 29);
+            this.btn_dest.TabIndex = 5;
+            this.btn_dest.Text = "Change";
+            this.btn_dest.UseVisualStyleBackColor = true;
+            this.btn_dest.Click += new System.EventHandler(this.btn_dest_Click);
             // 
-            // lbl_folder_path
+            // lbl_dest_path
             // 
-            this.lbl_folder_path.AutoSize = true;
-            this.lbl_folder_path.Location = new System.Drawing.Point(24, 77);
-            this.lbl_folder_path.Name = "lbl_folder_path";
-            this.lbl_folder_path.Size = new System.Drawing.Size(50, 20);
-            this.lbl_folder_path.TabIndex = 6;
-            this.lbl_folder_path.Text = "label1";
+            this.lbl_dest_path.AutoSize = true;
+            this.lbl_dest_path.Location = new System.Drawing.Point(24, 77);
+            this.lbl_dest_path.Name = "lbl_dest_path";
+            this.lbl_dest_path.Size = new System.Drawing.Size(50, 20);
+            this.lbl_dest_path.TabIndex = 6;
+            this.lbl_dest_path.Text = "label1";
             // 
             // grb_device
             // 
@@ -119,35 +124,76 @@ namespace Media_Backup
             this.grb_device.TabStop = false;
             this.grb_device.Text = "Device choice";
             // 
-            // grb_folder
+            // grb_dest
             // 
-            this.grb_folder.Controls.Add(this.lbl_folder_text);
-            this.grb_folder.Controls.Add(this.lbl_folder_path);
-            this.grb_folder.Controls.Add(this.btn_folder);
-            this.grb_folder.Location = new System.Drawing.Point(12, 170);
-            this.grb_folder.Name = "grb_folder";
-            this.grb_folder.Size = new System.Drawing.Size(350, 157);
-            this.grb_folder.TabIndex = 8;
-            this.grb_folder.TabStop = false;
-            this.grb_folder.Text = "Destination folder";
+            this.grb_dest.Controls.Add(this.lbl_dest_text);
+            this.grb_dest.Controls.Add(this.lbl_dest_path);
+            this.grb_dest.Controls.Add(this.btn_dest);
+            this.grb_dest.Location = new System.Drawing.Point(12, 309);
+            this.grb_dest.Name = "grb_dest";
+            this.grb_dest.Size = new System.Drawing.Size(350, 157);
+            this.grb_dest.TabIndex = 8;
+            this.grb_dest.TabStop = false;
+            this.grb_dest.Text = "Destination folder";
             // 
             // chb_metafiles
             // 
             this.chb_metafiles.AutoSize = true;
-            this.chb_metafiles.Location = new System.Drawing.Point(36, 349);
+            this.chb_metafiles.Location = new System.Drawing.Point(36, 482);
             this.chb_metafiles.Name = "chb_metafiles";
-            this.chb_metafiles.Size = new System.Drawing.Size(123, 24);
+            this.chb_metafiles.Size = new System.Drawing.Size(254, 24);
             this.chb_metafiles.TabIndex = 9;
-            this.chb_metafiles.Text = "Use metadata";
+            this.chb_metafiles.Text = "Extract media info from file name";
             this.chb_metafiles.UseVisualStyleBackColor = true;
+            // 
+            // grb_source
+            // 
+            this.grb_source.Controls.Add(this.lbl_source_text);
+            this.grb_source.Controls.Add(this.lbl_source_path);
+            this.grb_source.Controls.Add(this.btn_source);
+            this.grb_source.Location = new System.Drawing.Point(12, 158);
+            this.grb_source.Name = "grb_source";
+            this.grb_source.Size = new System.Drawing.Size(350, 140);
+            this.grb_source.TabIndex = 9;
+            this.grb_source.TabStop = false;
+            this.grb_source.Text = "Source folder";
+            // 
+            // lbl_source_text
+            // 
+            this.lbl_source_text.AutoSize = true;
+            this.lbl_source_text.Location = new System.Drawing.Point(24, 37);
+            this.lbl_source_text.Name = "lbl_source_text";
+            this.lbl_source_text.Size = new System.Drawing.Size(152, 20);
+            this.lbl_source_text.TabIndex = 4;
+            this.lbl_source_text.Text = "Choose source folder:";
+            // 
+            // lbl_source_path
+            // 
+            this.lbl_source_path.AutoSize = true;
+            this.lbl_source_path.Location = new System.Drawing.Point(24, 77);
+            this.lbl_source_path.Name = "lbl_source_path";
+            this.lbl_source_path.Size = new System.Drawing.Size(42, 20);
+            this.lbl_source_path.TabIndex = 6;
+            this.lbl_source_path.Text = "label";
+            // 
+            // btn_source
+            // 
+            this.btn_source.Location = new System.Drawing.Point(223, 33);
+            this.btn_source.Name = "btn_source";
+            this.btn_source.Size = new System.Drawing.Size(94, 29);
+            this.btn_source.TabIndex = 5;
+            this.btn_source.Text = "Change";
+            this.btn_source.UseVisualStyleBackColor = true;
+            this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
             // 
             // ChooseDeviceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 437);
+            this.ClientSize = new System.Drawing.Size(374, 572);
+            this.Controls.Add(this.grb_source);
             this.Controls.Add(this.chb_metafiles);
-            this.Controls.Add(this.grb_folder);
+            this.Controls.Add(this.grb_dest);
             this.Controls.Add(this.grb_device);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.btn_ok);
@@ -159,8 +205,10 @@ namespace Media_Backup
             this.Load += new System.EventHandler(this.ChooseDeviceForm_Load);
             this.grb_device.ResumeLayout(false);
             this.grb_device.PerformLayout();
-            this.grb_folder.ResumeLayout(false);
-            this.grb_folder.PerformLayout();
+            this.grb_dest.ResumeLayout(false);
+            this.grb_dest.PerformLayout();
+            this.grb_source.ResumeLayout(false);
+            this.grb_source.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -171,11 +219,15 @@ namespace Media_Backup
         public System.Windows.Forms.ComboBox cmb_devices;
         public System.Windows.Forms.Button btn_ok;
         public System.Windows.Forms.Button btn_cancel;
-        private System.Windows.Forms.Label lbl_folder_text;
-        private System.Windows.Forms.Button btn_folder;
-        private System.Windows.Forms.Label lbl_folder_path;
+        private System.Windows.Forms.Label lbl_dest_text;
+        private System.Windows.Forms.Button btn_dest;
+        private System.Windows.Forms.Label lbl_dest_path;
         private System.Windows.Forms.GroupBox grb_device;
-        private System.Windows.Forms.GroupBox grb_folder;
+        private System.Windows.Forms.GroupBox grb_dest;
         private System.Windows.Forms.CheckBox chb_metafiles;
+        private System.Windows.Forms.GroupBox grb_source;
+        private System.Windows.Forms.Label lbl_source_text;
+        private System.Windows.Forms.Label lbl_source_path;
+        private System.Windows.Forms.Button btn_source;
     }
 }

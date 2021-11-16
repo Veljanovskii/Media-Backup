@@ -47,6 +47,7 @@ namespace Media_Backup
             Folder folder = shell.BrowseForFolder(0, "Choose source folder", 0, 0);
             if (folder != null)
             {
+                
                 FolderItem fi = (folder as Folder3).Self;
                 var path = fi.Path;
             }
