@@ -72,7 +72,6 @@ namespace Media_Backup
                 if (!FileExists(folderPath, file.Name)) // file already exists
                 {
                     NewFiles.Add(file);
-                    //idea: local files = newfiles.fullpath
                 }
             }
 
@@ -106,6 +105,7 @@ namespace Media_Backup
                 BarForm.lbl_progress.Text = @$"Transferring...{progress}/{NewFiles.Count} ({Math.Round((double)progress / NewFiles.Count * 100)}%)";
             }
             BarForm.Close();
+            MediaDevice.Disconnect();
         }
 
         private string ExtractYear(MediaFileInfo file)
@@ -115,46 +115,45 @@ namespace Media_Backup
 
         public void MediaPreview(MainForm form)
         {
+            /*Buttons settings*/
+            form.btn_start.Location = new Point(180, 500);
+            form.btn_left.Location = new Point(220, 500);
+            form.btn_right.Location = new Point(280, 500);
+            form.btn_end.Location = new Point(320, 500);
+
+            /*Groupbox*/
+            form.grb_preview.Location = new Point(12, 48);
+            form.grb_preview.Visible = true;
+            form.grb_preview.Size = new Size(532, 440);
+
             /*Image preview*/
             if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
             {
                 /*Retrieve image*/
                 Bitmap image;
-                if (UseFileName == true) 
-                   image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name));
+                if (UseFileName == true)
+                {
+                    image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name));
+                }
                 else
-                   image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name));
-
-                form.grb_preview.Location = new Point(12, 12);
-                form.grb_preview.Visible = true;
-                form.pcb_image.Location = new Point(6, 36);
-                form.pcb_image.Visible = true;
-                
+                {
+                    image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name));
+                }              
+                                
+                /*Show image*/
                 if (image.Width == 4160)
                 {
-                    form.grb_preview.Size = new Size(532, 518);
                     form.pcb_image.Size = new Size(520, 390);
-
-                    /*Buttons settings*/
-                    form.btn_start.Location = new Point(172, 450);
-                    form.btn_left.Location = new Point(215, 450);
-                    form.btn_right.Location = new Point(271, 450);
-                    form.btn_end.Location = new Point(314, 450);
-
+                    form.pcb_image.Location = new Point(6, 36);
+                    form.pcb_image.Visible = true;
                     form.pcb_image.Image = image;
 
                 }
                 else if (image.Width == 3120)
                 {
-                    form.grb_preview.Size = new Size(402, 648);
-                    form.pcb_image.Size = new Size(390, 520);
-
-                    /*Buttons settings*/
-                    form.btn_start.Location = new Point(112, 600);
-                    form.btn_left.Location = new Point(165, 600);
-                    form.btn_right.Location = new Point(221, 600);
-                    form.btn_end.Location = new Point(264, 600);
-
+                    form.pcb_image.Size = new Size(305, 390);
+                    form.pcb_image.Location = new Point(113, 36);
+                    form.pcb_image.Visible = true;
                     form.pcb_image.Image = image;
                 }
 

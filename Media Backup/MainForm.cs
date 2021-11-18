@@ -30,6 +30,7 @@ namespace Media_Backup
             var res = form.ShowDialog();
             if (res == DialogResult.Cancel)
                 Environment.Exit(0);
+
             this.Text = proxy.MediaDevice.FriendlyName;
 
             /*Accessing data from the device*/
@@ -37,25 +38,6 @@ namespace Media_Backup
 
             /*Media preview*/            
             proxy.MediaPreview(this);
-
-            //DataClass.MediaDevice.Disconnect();
-        }
-
-        private void btn_source_Click(object sender, EventArgs e)
-        {
-            Shell shell = new Shell();
-            Folder folder = shell.BrowseForFolder(0, "Choose source folder", 0, 0);
-            if (folder != null)
-            {
-                
-                FolderItem fi = (folder as Folder3).Self;
-                var path = fi.Path;
-            }
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            proxy.MediaDevice.Disconnect();
         }
 
         private void btn_right_Click(object sender, EventArgs e)
@@ -86,6 +68,34 @@ namespace Media_Backup
         {
             proxy.MediaIndex = 0;
             proxy.MediaPreview(this);
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            /*Shuffle using arrow keys*/
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                    btn_end.PerformClick();
+                    break;
+                case Keys.Down:
+                    btn_start.PerformClick();
+                    break;
+                case Keys.Right:
+                    btn_right.PerformClick();
+                    break;
+                case Keys.Left:
+                    btn_left.PerformClick();
+                    break;
+            }
+        }
+
+        private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            /*Prevents focus change*/
+            var keys = new[] { Keys.Left, Keys.Right, Keys.Up, Keys.Down };
+            if (keys.Contains(e.KeyData))
+                e.IsInputKey = true;
         }
     }
 }

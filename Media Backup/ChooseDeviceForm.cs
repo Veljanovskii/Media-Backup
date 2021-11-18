@@ -51,7 +51,7 @@ namespace Media_Backup
 
             lbl_dest_path.MaximumSize = new Size(320, 0);
             lbl_dest_path.AutoSize = true;
-            lbl_dest_path.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);            
+            lbl_dest_path.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);            
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
@@ -72,7 +72,7 @@ namespace Media_Backup
 
                 if (Parent_Form.proxy.DestinationFolder == null)
                 {
-                    Parent_Form.proxy.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    Parent_Form.proxy.DestinationFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 }
 
                 if (chb_metafiles.Checked)
