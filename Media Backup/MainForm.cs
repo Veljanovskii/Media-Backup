@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Media_Backup;
 using System.IO;
-using Shell32;
 
 namespace Media_Backup
 {

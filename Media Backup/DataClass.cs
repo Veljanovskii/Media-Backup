@@ -5,7 +5,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Forms;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace Media_Backup
 {
@@ -102,7 +105,7 @@ namespace Media_Backup
                 WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
 
                 BarForm.SetProgress(progress++);
-                BarForm.lbl_progress.Text = @$"Transferring...{progress}/{NewFiles.Count} ({Math.Round((double)progress / NewFiles.Count * 100)}%)";
+                BarForm.lbl_progress.Text = $@"Transferring...{progress}/{NewFiles.Count} ({Math.Round((double)progress / NewFiles.Count * 100)}%)";
             }
             BarForm.Close();
             MediaDevice.Disconnect();
@@ -160,6 +163,13 @@ namespace Media_Backup
             }
             else if(NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
             {
+                //usewpf true
+                form.pcb_image.Visible = false;
+                form.axWindowsMediaPlayer1.Location = new Point(6, 29);
+                form.axWindowsMediaPlayer1.Size = new Size(520, 390);
+                form.axWindowsMediaPlayer1.URL = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name);
+                form.axWindowsMediaPlayer1.Ctlcontrols.play();
+                    //$@"C:\Users\Nenad\Desktop\HUAWEI P smart 2019\2021\VID_20211030_222919.mp4";
 
             }
 
@@ -167,17 +177,17 @@ namespace Media_Backup
 
             if (NewFiles.Count == 0)
             {
-                form.lbl_count.Text = @$"There are 0 new files detected.";
+                form.lbl_count.Text = $@"There are 0 new files detected.";
             }
             else
             {
                 if (NewFiles.Count == 1)
                 {
-                    form.lbl_count.Text = @$"There is 1 new file detected.";
+                    form.lbl_count.Text = $@"There is 1 new file detected.";
                 }
                 else
                 {
-                    form.lbl_count.Text = @$"There are {NewFiles.Count} new files detected.";
+                    form.lbl_count.Text = $@"There are {NewFiles.Count} new files detected.";
                 }
             }
 
