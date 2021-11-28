@@ -1,4 +1,5 @@
-﻿using MediaDevices;
+﻿using LibVLCSharp.Shared;
+using MediaDevices;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -20,12 +21,14 @@ namespace Media_Backup
         public bool UseFileName { get; set; }
         public IList<MediaDevices.MediaFileInfo> NewFiles { get; set; }
         public int MediaIndex { get; set; }
+        public bool IsPlaying { get; set; }
 
 
         public DataClass()
         {
             NewFiles = new List<MediaDevices.MediaFileInfo>();
             MediaIndex = 0;
+            IsPlaying = false;
         }
 
         public IEnumerable<MediaDevice> GetDevices()
@@ -119,36 +122,50 @@ namespace Media_Backup
         public void MediaPreview(MainForm form)
         {
             /*Buttons settings*/
-            form.btn_start.Location = new Point(180, 500);
-            form.btn_left.Location = new Point(220, 500);
-            form.btn_right.Location = new Point(280, 500);
-            form.btn_end.Location = new Point(320, 500);
+            form.btn_start.Location = new Point(180, 550);
+            form.btn_left.Location = new Point(220, 550);
+            form.btn_right.Location = new Point(280, 550);
+            form.btn_end.Location = new Point(320, 550);
 
             /*Groupbox*/
             form.grb_preview.Location = new Point(12, 48);
             form.grb_preview.Visible = true;
-            form.grb_preview.Size = new Size(532, 440);
+            form.grb_preview.Size = new Size(532, 490);
+
+            form.videoView.Visible = false;
+            form.pcb_image.Visible = false;
+
+            LabelMessage(form);
+
+            if (NewFiles.Count == 0)
+                return;
+
+            string path;
+            if (UseFileName == true)
+            {
+                path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name);
+            }
+            else
+            {
+                path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name);
+            }
+            form.lbl_media.Text = NewFiles.ElementAt(MediaIndex).Name;
+            form._mp.Pause();
+            IsPlaying = false;
 
             /*Image preview*/
             if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
             {
                 /*Retrieve image*/
-                Bitmap image;
-                if (UseFileName == true)
-                {
-                    image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name));
-                }
-                else
-                {
-                    image = new Bitmap(Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name));
-                }              
-                                
+                Bitmap image = new Bitmap(path);                
+                form.pcb_image.Visible = true;
+                form.lbl_times.Visible = false;
+                
                 /*Show image*/
                 if (image.Width == 4160)
                 {
                     form.pcb_image.Size = new Size(520, 390);
                     form.pcb_image.Location = new Point(6, 36);
-                    form.pcb_image.Visible = true;
                     form.pcb_image.Image = image;
 
                 }
@@ -156,25 +173,24 @@ namespace Media_Backup
                 {
                     form.pcb_image.Size = new Size(305, 390);
                     form.pcb_image.Location = new Point(113, 36);
-                    form.pcb_image.Visible = true;
                     form.pcb_image.Image = image;
                 }
-
             }
             else if(NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
             {
-                //usewpf true
-                form.pcb_image.Visible = false;
-                form.axWindowsMediaPlayer1.Location = new Point(6, 29);
-                form.axWindowsMediaPlayer1.Size = new Size(520, 390);
-                form.axWindowsMediaPlayer1.URL = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name);
-                form.axWindowsMediaPlayer1.Ctlcontrols.play();
-                    //$@"C:\Users\Nenad\Desktop\HUAWEI P smart 2019\2021\VID_20211030_222919.mp4";
+                /*VLC settings*/
+                form.videoView.Visible = true;
+                form.videoView.Location = new Point(6, 36);
+                form.videoView.Size = new Size(520, 390);
+                form._mp.Play(new Media(form._libVLC, path));
+                IsPlaying = true;
+                form.lbl_times.Visible = false;
+                form.lbl_times.Text = form._mp.Time + "/" + form._mp.Length;
+            }            
+        }
 
-            }
-
-            
-
+        private void LabelMessage(MainForm form)
+        {
             if (NewFiles.Count == 0)
             {
                 form.lbl_count.Text = $@"There are 0 new files detected.";
@@ -190,9 +206,6 @@ namespace Media_Backup
                     form.lbl_count.Text = $@"There are {NewFiles.Count} new files detected.";
                 }
             }
-
-            //var image = new Bitmap(@$"This PC\HUAWEI P smart 2019\Internal storage\DCIM\Camera\IMG_20200220_140911.jpg");
-            
         }
     }
 }

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Media_Backup;
 using System.IO;
+using LibVLCSharp.Shared;
+using LibVLCSharp.WinForms;
 
 namespace Media_Backup
 {
@@ -16,10 +18,23 @@ namespace Media_Backup
     {
         public DataClass proxy { get; set; }
 
+        public LibVLC _libVLC;
+        public MediaPlayer _mp;
+        public Media media;
+        public VideoView videoView;
+
         public MainForm()
         {
             InitializeComponent();
             proxy = new DataClass();
+
+            /*VLC Media player*/
+            Core.Initialize();
+            _libVLC = new LibVLC();
+            videoView = new VideoView();
+            _mp = new MediaPlayer(_libVLC);
+            videoView.MediaPlayer = _mp;
+            grb_preview.Controls.Add(videoView);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -31,6 +46,11 @@ namespace Media_Backup
                 Environment.Exit(0);
 
             this.Text = proxy.MediaDevice.FriendlyName;
+
+            /*Trackbar settings*/
+            trb_time.Minimum = 2;
+            trb_time.Maximum = 120;
+            trb_time.TickFrequency = 10;
 
             /*Accessing data from the device*/
             proxy.TransferMedia();
@@ -86,15 +106,32 @@ namespace Media_Backup
                 case Keys.Left:
                     btn_left.PerformClick();
                     break;
+                case Keys.Space:
+                    if (proxy.IsPlaying == true)
+                    {
+                        _mp.Pause();
+                        proxy.IsPlaying = false;
+                    }
+                    else
+                    {
+                        _mp.Play();
+                        proxy.IsPlaying = true;
+                    }
+                    break;
             }
         }
 
         private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             /*Prevents focus change*/
-            var keys = new[] { Keys.Left, Keys.Right, Keys.Up, Keys.Down };
+            var keys = new[] { Keys.Left, Keys.Right, Keys.Up, Keys.Down, Keys.Space };
             if (keys.Contains(e.KeyData))
                 e.IsInputKey = true;
+        }
+
+        private void trb_time_Scroll(object sender, EventArgs e)
+        {
+            lbl_trackbar.Text = trb_time.Value + " minutes";
         }
     }
 }
