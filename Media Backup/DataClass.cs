@@ -64,8 +64,18 @@ namespace Media_Backup
         public void TransferMedia()
         {
             /*Accessing data from the device*/
-            MediaDevice.Connect();
-            var photoDir = MediaDevice.GetDirectoryInfo(SourceFolder);
+            MediaDirectoryInfo photoDir = null;
+            try
+            {
+                MediaDevice.Connect();
+                photoDir = MediaDevice.GetDirectoryInfo(SourceFolder);
+            }
+            catch(Exception e)
+            {
+                var result = MessageBox.Show(e.Message, "Unable to connect to the device", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.OK)
+                    Environment.Exit(0);
+            }
             var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
                 .OrderBy(s => s.FullName)
                 .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
@@ -80,7 +90,7 @@ namespace Media_Backup
                     NewFiles.Add(file);
                 }
             }
-
+            
             /*Progress bar*/
             ProgressBarForm BarForm = new ProgressBarForm();
             BarForm.Text = "Transferring...";
@@ -119,18 +129,27 @@ namespace Media_Backup
             return file.Name.Substring(4, 4);       // starting index 4, length 4
         }
 
+        private string ExtractDateTime(MediaFileInfo file)
+        {
+            var name = file.Name;
+            string result = name.Substring(10, 2) + "." + name.Substring(8, 2) + "." + name.Substring(4, 4);
+            result += " " + name.Substring(13, 2) + ":" + name.Substring(15, 2) + ":" + name.Substring(17, 2);
+
+            return result;
+        }
+
         public void MediaPreview(MainForm form)
         {
             /*Buttons settings*/
-            form.btn_start.Location = new Point(180, 550);
-            form.btn_left.Location = new Point(220, 550);
-            form.btn_right.Location = new Point(280, 550);
-            form.btn_end.Location = new Point(320, 550);
+            form.btn_start.Location = new Point(180, 580);
+            form.btn_left.Location = new Point(220, 580);
+            form.btn_right.Location = new Point(280, 580);
+            form.btn_end.Location = new Point(320, 580);
 
             /*Groupbox*/
             form.grb_preview.Location = new Point(12, 48);
             form.grb_preview.Visible = true;
-            form.grb_preview.Size = new Size(532, 490);
+            form.grb_preview.Size = new Size(532, 520);
 
             form.videoView.Visible = false;
             form.pcb_image.Visible = false;
@@ -142,14 +161,22 @@ namespace Media_Backup
                 return;
 
             string path;
+            form.lbl_counter.Visible = true;
+            form.lbl_counter.Text = (MediaIndex + 1) + "/" + NewFiles.Count;
+
+            form.lbl_datetime.Visible = true;
             if (UseFileName == true)
             {
                 path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name);
+                form.lbl_datetime.Text = ExtractDateTime(NewFiles.ElementAt(MediaIndex));
             }
             else
             {
                 path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name);
+                form.lbl_datetime.Text = NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.ToString("dd.MM.yyyy HH:mm:ss");                
             }
+
+            form.lbl_media.Visible = true;
             form.lbl_media.Text = NewFiles.ElementAt(MediaIndex).Name;
             form._mp.Pause();
             IsPlaying = false;
@@ -165,14 +192,14 @@ namespace Media_Backup
                 if (image.Width == 4160)
                 {
                     form.pcb_image.Size = new Size(520, 390);
-                    form.pcb_image.Location = new Point(6, 36);
+                    form.pcb_image.Location = new Point(6, 66);
                     form.pcb_image.Image = image;
 
                 }
                 else if (image.Width == 3120)
                 {
                     form.pcb_image.Size = new Size(305, 390);
-                    form.pcb_image.Location = new Point(113, 36);
+                    form.pcb_image.Location = new Point(113, 66);
                     form.pcb_image.Image = image;
                 }
             }
@@ -180,14 +207,12 @@ namespace Media_Backup
             {
                 /*VLC settings*/
                 form.videoView.Visible = true;
-                form.videoView.Location = new Point(6, 36);
+                form.videoView.Location = new Point(6, 66);
                 form.videoView.Size = new Size(520, 390);
                 form._mp.Volume = 0;
                 form._mp.Play(new Media(form._libVLC, path));
                 IsPlaying = true;
             }
-
-            form.lbl_counter.Text = (MediaIndex + 1) + "/" + NewFiles.Count;
         }
 
         private void LabelMessage(MainForm form)
