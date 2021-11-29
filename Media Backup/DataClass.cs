@@ -135,6 +135,7 @@ namespace Media_Backup
             form.videoView.Visible = false;
             form.pcb_image.Visible = false;
 
+            /*Shows new media count*/
             LabelMessage(form);
 
             if (NewFiles.Count == 0)
@@ -157,10 +158,9 @@ namespace Media_Backup
             if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
             {
                 /*Retrieve image*/
-                Bitmap image = new Bitmap(path);                
+                Bitmap image = new Bitmap(path);
                 form.pcb_image.Visible = true;
-                form.lbl_times.Visible = false;
-                
+
                 /*Show image*/
                 if (image.Width == 4160)
                 {
@@ -176,17 +176,18 @@ namespace Media_Backup
                     form.pcb_image.Image = image;
                 }
             }
-            else if(NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
+            else if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
             {
                 /*VLC settings*/
                 form.videoView.Visible = true;
                 form.videoView.Location = new Point(6, 36);
                 form.videoView.Size = new Size(520, 390);
+                form._mp.Volume = 0;
                 form._mp.Play(new Media(form._libVLC, path));
                 IsPlaying = true;
-                form.lbl_times.Visible = false;
-                form.lbl_times.Text = form._mp.Time + "/" + form._mp.Length;
-            }            
+            }
+
+            form.lbl_counter.Text = (MediaIndex + 1) + "/" + NewFiles.Count;
         }
 
         private void LabelMessage(MainForm form)
@@ -206,6 +207,12 @@ namespace Media_Backup
                     form.lbl_count.Text = $@"There are {NewFiles.Count} new files detected.";
                 }
             }
+        }
+
+        internal void FillMediaList(MainForm form)
+        {
+            foreach (var item in NewFiles)
+                form.clb_media.Items.Add(item.Name);
         }
     }
 }

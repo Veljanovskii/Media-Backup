@@ -20,7 +20,6 @@ namespace Media_Backup
 
         public LibVLC _libVLC;
         public MediaPlayer _mp;
-        public Media media;
         public VideoView videoView;
 
         public MainForm()
@@ -57,6 +56,8 @@ namespace Media_Backup
 
             /*Media preview*/            
             proxy.MediaPreview(this);
+
+            proxy.FillMediaList(this);
         }
 
         private void btn_right_Click(object sender, EventArgs e)
@@ -91,22 +92,10 @@ namespace Media_Backup
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            /*Shuffle using arrow keys*/
+            /*VLC Media Controls*/
             switch (e.KeyCode)
-            {
-                case Keys.Up:
-                    btn_end.PerformClick();
-                    break;
-                case Keys.Down:
-                    btn_start.PerformClick();
-                    break;
-                case Keys.Right:
-                    btn_right.PerformClick();
-                    break;
-                case Keys.Left:
-                    btn_left.PerformClick();
-                    break;
-                case Keys.Space:
+            {                
+                case Keys.Add:
                     if (proxy.IsPlaying == true)
                     {
                         _mp.Pause();
@@ -124,7 +113,7 @@ namespace Media_Backup
         private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             /*Prevents focus change*/
-            var keys = new[] { Keys.Left, Keys.Right, Keys.Up, Keys.Down, Keys.Space };
+            var keys = new[] { Keys.Add };
             if (keys.Contains(e.KeyData))
                 e.IsInputKey = true;
         }
@@ -132,6 +121,13 @@ namespace Media_Backup
         private void trb_time_Scroll(object sender, EventArgs e)
         {
             lbl_trackbar.Text = trb_time.Value + " minutes";
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            videoView.Dispose();
+            _mp.Dispose();
+            _libVLC.Dispose();
         }
     }
 }

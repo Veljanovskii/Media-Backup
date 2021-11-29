@@ -30,7 +30,7 @@ namespace Media_Backup
         private void InitializeComponent()
         {
             this.grb_preview = new System.Windows.Forms.GroupBox();
-            this.lbl_times = new System.Windows.Forms.Label();
+            this.lbl_counter = new System.Windows.Forms.Label();
             this.lbl_media = new System.Windows.Forms.Label();
             this.pcb_image = new System.Windows.Forms.PictureBox();
             this.btn_start = new System.Windows.Forms.Button();
@@ -43,18 +43,19 @@ namespace Media_Backup
             this.lbl_tag = new System.Windows.Forms.Label();
             this.trb_time = new System.Windows.Forms.TrackBar();
             this.lbl_time = new System.Windows.Forms.Label();
-            this.mns_menu = new System.Windows.Forms.MenuStrip();
-            this.tsmi_settings = new System.Windows.Forms.ToolStripMenuItem();
             this.lbl_trackbar = new System.Windows.Forms.Label();
+            this.grb_tags = new System.Windows.Forms.GroupBox();
+            this.lbl_selected = new System.Windows.Forms.Label();
+            this.clb_media = new System.Windows.Forms.CheckedListBox();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).BeginInit();
-            this.mns_menu.SuspendLayout();
+            this.grb_tags.SuspendLayout();
             this.SuspendLayout();
             // 
             // grb_preview
             // 
-            this.grb_preview.Controls.Add(this.lbl_times);
+            this.grb_preview.Controls.Add(this.lbl_counter);
             this.grb_preview.Controls.Add(this.lbl_media);
             this.grb_preview.Controls.Add(this.pcb_image);
             this.grb_preview.Location = new System.Drawing.Point(12, 48);
@@ -66,15 +67,14 @@ namespace Media_Backup
             this.grb_preview.TabStop = false;
             this.grb_preview.Text = "Media preview";
             // 
-            // lbl_times
+            // lbl_counter
             // 
-            this.lbl_times.AutoSize = true;
-            this.lbl_times.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbl_times.Location = new System.Drawing.Point(438, 384);
-            this.lbl_times.Name = "lbl_times";
-            this.lbl_times.Size = new System.Drawing.Size(50, 20);
-            this.lbl_times.TabIndex = 2;
-            this.lbl_times.Text = "label1";
+            this.lbl_counter.AutoSize = true;
+            this.lbl_counter.Location = new System.Drawing.Point(479, 445);
+            this.lbl_counter.Name = "lbl_counter";
+            this.lbl_counter.Size = new System.Drawing.Size(27, 20);
+            this.lbl_counter.TabIndex = 2;
+            this.lbl_counter.Text = "_/_";
             // 
             // lbl_media
             // 
@@ -145,15 +145,15 @@ namespace Media_Backup
             // lbl_count
             // 
             this.lbl_count.AutoSize = true;
-            this.lbl_count.Location = new System.Drawing.Point(591, 58);
+            this.lbl_count.Location = new System.Drawing.Point(586, 48);
             this.lbl_count.Name = "lbl_count";
-            this.lbl_count.Size = new System.Drawing.Size(50, 20);
+            this.lbl_count.Size = new System.Drawing.Size(155, 20);
             this.lbl_count.TabIndex = 6;
-            this.lbl_count.Text = "label1";
+            this.lbl_count.Text = "_ new media detected";
             // 
             // txt_tag
             // 
-            this.txt_tag.Location = new System.Drawing.Point(678, 331);
+            this.txt_tag.Location = new System.Drawing.Point(102, 209);
             this.txt_tag.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_tag.Name = "txt_tag";
             this.txt_tag.Size = new System.Drawing.Size(125, 27);
@@ -162,7 +162,7 @@ namespace Media_Backup
             // 
             // btn_tag
             // 
-            this.btn_tag.Location = new System.Drawing.Point(606, 378);
+            this.btn_tag.Location = new System.Drawing.Point(30, 256);
             this.btn_tag.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_tag.Name = "btn_tag";
             this.btn_tag.Size = new System.Drawing.Size(94, 29);
@@ -174,7 +174,7 @@ namespace Media_Backup
             // lbl_tag
             // 
             this.lbl_tag.AutoSize = true;
-            this.lbl_tag.Location = new System.Drawing.Point(606, 334);
+            this.lbl_tag.Location = new System.Drawing.Point(30, 212);
             this.lbl_tag.Name = "lbl_tag";
             this.lbl_tag.Size = new System.Drawing.Size(35, 20);
             this.lbl_tag.TabIndex = 9;
@@ -182,7 +182,7 @@ namespace Media_Backup
             // 
             // trb_time
             // 
-            this.trb_time.Location = new System.Drawing.Point(591, 228);
+            this.trb_time.Location = new System.Drawing.Point(27, 94);
             this.trb_time.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.trb_time.Maximum = 5;
             this.trb_time.Name = "trb_time";
@@ -194,63 +194,74 @@ namespace Media_Backup
             // lbl_time
             // 
             this.lbl_time.AutoSize = true;
-            this.lbl_time.Location = new System.Drawing.Point(591, 176);
+            this.lbl_time.Location = new System.Drawing.Point(27, 42);
             this.lbl_time.Name = "lbl_time";
-            this.lbl_time.Size = new System.Drawing.Size(172, 20);
+            this.lbl_time.Size = new System.Drawing.Size(173, 20);
             this.lbl_time.TabIndex = 7;
-            this.lbl_time.Text = "Allowed time difference:";
-            // 
-            // mns_menu
-            // 
-            this.mns_menu.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.mns_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmi_settings});
-            this.mns_menu.Location = new System.Drawing.Point(0, 0);
-            this.mns_menu.Name = "mns_menu";
-            this.mns_menu.Size = new System.Drawing.Size(940, 28);
-            this.mns_menu.TabIndex = 9;
-            this.mns_menu.Text = "menuStrip1";
-            // 
-            // tsmi_settings
-            // 
-            this.tsmi_settings.Name = "tsmi_settings";
-            this.tsmi_settings.Size = new System.Drawing.Size(76, 24);
-            this.tsmi_settings.Text = "Settings";
+            this.lbl_time.Text = "Time difference allowed:";
             // 
             // lbl_trackbar
             // 
             this.lbl_trackbar.AutoSize = true;
-            this.lbl_trackbar.Location = new System.Drawing.Point(841, 228);
+            this.lbl_trackbar.Location = new System.Drawing.Point(277, 94);
             this.lbl_trackbar.Name = "lbl_trackbar";
             this.lbl_trackbar.Size = new System.Drawing.Size(73, 20);
             this.lbl_trackbar.TabIndex = 12;
             this.lbl_trackbar.Text = "2 minutes";
             // 
+            // grb_tags
+            // 
+            this.grb_tags.Controls.Add(this.lbl_selected);
+            this.grb_tags.Controls.Add(this.lbl_time);
+            this.grb_tags.Controls.Add(this.lbl_trackbar);
+            this.grb_tags.Controls.Add(this.trb_time);
+            this.grb_tags.Controls.Add(this.txt_tag);
+            this.grb_tags.Controls.Add(this.btn_tag);
+            this.grb_tags.Controls.Add(this.lbl_tag);
+            this.grb_tags.Location = new System.Drawing.Point(569, 103);
+            this.grb_tags.Name = "grb_tags";
+            this.grb_tags.Size = new System.Drawing.Size(407, 321);
+            this.grb_tags.TabIndex = 13;
+            this.grb_tags.TabStop = false;
+            this.grb_tags.Text = "Manage tags";
+            // 
+            // lbl_selected
+            // 
+            this.lbl_selected.AutoSize = true;
+            this.lbl_selected.Location = new System.Drawing.Point(30, 156);
+            this.lbl_selected.Name = "lbl_selected";
+            this.lbl_selected.Size = new System.Drawing.Size(120, 20);
+            this.lbl_selected.TabIndex = 13;
+            this.lbl_selected.Text = "_ media selected";
+            // 
+            // clb_media
+            // 
+            this.clb_media.FormattingEnabled = true;
+            this.clb_media.Location = new System.Drawing.Point(569, 442);
+            this.clb_media.Name = "clb_media";
+            this.clb_media.Size = new System.Drawing.Size(350, 136);
+            this.clb_media.TabIndex = 14;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(940, 648);
-            this.Controls.Add(this.lbl_trackbar);
+            this.ClientSize = new System.Drawing.Size(1015, 648);
+            this.Controls.Add(this.clb_media);
+            this.Controls.Add(this.grb_tags);
             this.Controls.Add(this.btn_start);
-            this.Controls.Add(this.lbl_time);
             this.Controls.Add(this.btn_end);
             this.Controls.Add(this.btn_left);
-            this.Controls.Add(this.trb_time);
             this.Controls.Add(this.btn_right);
-            this.Controls.Add(this.lbl_tag);
-            this.Controls.Add(this.btn_tag);
-            this.Controls.Add(this.txt_tag);
             this.Controls.Add(this.lbl_count);
             this.Controls.Add(this.grb_preview);
-            this.Controls.Add(this.mns_menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
-            this.MainMenuStrip = this.mns_menu;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Media Backup";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainForm_PreviewKeyDown);
@@ -258,8 +269,8 @@ namespace Media_Backup
             this.grb_preview.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).EndInit();
-            this.mns_menu.ResumeLayout(false);
-            this.mns_menu.PerformLayout();
+            this.grb_tags.ResumeLayout(false);
+            this.grb_tags.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -278,11 +289,12 @@ namespace Media_Backup
         private System.Windows.Forms.Label lbl_tag;
         private System.Windows.Forms.TrackBar trb_time;
         private System.Windows.Forms.Label lbl_time;
-        private System.Windows.Forms.MenuStrip mns_menu;
-        private System.Windows.Forms.ToolStripMenuItem tsmi_settings;
         private System.Windows.Forms.Label lbl_trackbar;
         public System.Windows.Forms.Label lbl_media;
-        public System.Windows.Forms.Label lbl_times;
+        private System.Windows.Forms.GroupBox grb_tags;
+        public System.Windows.Forms.CheckedListBox clb_media;
+        private System.Windows.Forms.Label lbl_selected;
+        public System.Windows.Forms.Label lbl_counter;
     }
 }
 
