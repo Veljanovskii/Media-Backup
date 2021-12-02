@@ -25,6 +25,7 @@ namespace Media_Backup
         public int MinutesRange { get; set; }
         public IList<int> TagIndexes { get; set; }
 
+        public Bitmap image { get; set; }
 
         public DataClass()
         {
@@ -80,6 +81,7 @@ namespace Media_Backup
                 if (result == DialogResult.OK)
                     Environment.Exit(0);
             }
+
             var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
                 .OrderBy(s => s.FullName)
                 .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
@@ -109,15 +111,8 @@ namespace Media_Backup
                 MemoryStream memoryStream = new MemoryStream();
                 MediaDevice.DownloadFile(file.FullName, memoryStream);
                 memoryStream.Position = 0;
-                String filePath;
-                if (UseFileName == true)
-                {
-                    filePath = Path.Combine(folderPath, ExtractYear(file));
-                }
-                else
-                {
-                    filePath = Path.Combine(folderPath, file.LastWriteTime.Value.Year.ToString());
-                }
+                String filePath = Path.Combine(folderPath, ExtractYear(file));
+                                
                 Directory.CreateDirectory(filePath);
                 WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
 
@@ -130,16 +125,26 @@ namespace Media_Backup
 
         private string ExtractYear(MediaFileInfo file)
         {
-            return file.Name.Substring(4, 4);       // starting index 4, length 4
+            if (UseFileName == true)
+                return file.Name.Substring(4, 4);       // starting index 4, length 4
+            else
+                return file.LastWriteTime.Value.Year.ToString();
         }
 
         private string ExtractDateTime(MediaFileInfo file)
         {
-            var name = file.Name;
-            string result = name.Substring(10, 2) + "." + name.Substring(8, 2) + "." + name.Substring(4, 4);
-            result += " " + name.Substring(13, 2) + ":" + name.Substring(15, 2) + ":" + name.Substring(17, 2);
+            if (UseFileName == true)
+            {
+                var name = file.Name;
+                string result = name.Substring(10, 2) + "." + name.Substring(8, 2) + "." + name.Substring(4, 4);
+                result += " " + name.Substring(13, 2) + ":" + name.Substring(15, 2) + ":" + name.Substring(17, 2);
 
-            return result;
+                return result;
+            }
+            else
+            {
+                return file.LastWriteTime.Value.ToString("dd.MM.yyyy HH:mm:ss");
+            }
         }
 
         public void MediaPreview(MainForm form)
@@ -168,18 +173,11 @@ namespace Media_Backup
             form.lbl_counter.Visible = true;
             form.lbl_counter.Text = (MediaIndex + 1) + "/" + NewFiles.Count;
 
+            path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name);
+            
             form.lbl_datetime.Visible = true;
-            if (UseFileName == true)
-            {
-                path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles.ElementAt(MediaIndex)), NewFiles.ElementAt(MediaIndex).Name);
-                form.lbl_datetime.Text = ExtractDateTime(NewFiles.ElementAt(MediaIndex));
-            }
-            else
-            {
-                path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.Year.ToString(), NewFiles.ElementAt(MediaIndex).Name);
-                form.lbl_datetime.Text = NewFiles.ElementAt(MediaIndex).LastWriteTime.Value.ToString("dd.MM.yyyy HH:mm:ss");                
-            }
-
+            form.lbl_datetime.Text = ExtractDateTime(NewFiles.ElementAt(MediaIndex));
+            
             form.lbl_media.Visible = true;
             form.lbl_media.Text = NewFiles.ElementAt(MediaIndex).Name;
             form._mp.Pause();
@@ -189,7 +187,8 @@ namespace Media_Backup
             if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
             {
                 /*Retrieve image*/
-                Bitmap image = new Bitmap(path);
+                image = new Bitmap(path);
+                form.pcb_image.Image = image;
                 form.pcb_image.Visible = true;
 
                 /*Show image*/
@@ -197,14 +196,12 @@ namespace Media_Backup
                 {
                     form.pcb_image.Size = new Size(520, 390);
                     form.pcb_image.Location = new Point(6, 66);
-                    form.pcb_image.Image = image;
 
                 }
                 else if (image.Width == 3120)
                 {
                     form.pcb_image.Size = new Size(305, 390);
                     form.pcb_image.Location = new Point(113, 66);
-                    form.pcb_image.Image = image;
                 }
             }
             else if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
@@ -250,29 +247,14 @@ namespace Media_Backup
         {
             TagIndexes.Clear();
 
-            if (UseFileName == true)
+            for (int i = 0; i < NewFiles.Count; i++)
             {
-                /*Extract info from file name*/
-                for (int i = 0; i < NewFiles.Count; i++)
+                if (CheckRange(ExtractDateTime(NewFiles[MediaIndex]), ExtractDateTime(NewFiles[i])) == true)
                 {
-                    if (CheckRangeString(ExtractDateTime(NewFiles[MediaIndex]), ExtractDateTime(NewFiles[i])) == true)
-                    {
-                        TagIndexes.Add(i);
-                    }
+                    TagIndexes.Add(i);
                 }
             }
-            else
-            {
-                /*Extract info from metadata*/
-                for (int i = 0; i < NewFiles.Count; i++)
-                {
-                    if (CheckRangeDateTime(NewFiles[MediaIndex].LastWriteTime.Value, NewFiles[i].LastWriteTime.Value) == true)
-                    {
-                        TagIndexes.Add(i);
-                    }
-                }
-            }
-
+            
             /*Uncheck all*/
             for (int i = 0; i < NewFiles.Count; i++)
             {
@@ -289,19 +271,44 @@ namespace Media_Backup
             form.lbl_selected.Text = TagIndexes.Count + " media selected";
         }
 
-        private bool CheckRangeDateTime(DateTime value1, DateTime value2)
+        private bool CheckRange(string v1, string v2)
         {
+            DateTime value1 = DateTime.ParseExact(v1, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime value2 = DateTime.ParseExact(v2, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
             TimeSpan span = value1 - value2;
 
             return Math.Abs(span.TotalMinutes) <= MinutesRange;
         }
 
-        private bool CheckRangeString(string v1, string v2)
+        internal void MoveMedia(MainForm form)
         {
-            DateTime value1 = DateTime.ParseExact(v1, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-            DateTime value2 = DateTime.ParseExact(v2, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            String path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
 
-            return CheckRangeDateTime(value1, value2);
+            image.Dispose();
+
+            for (int i = 0; i < TagIndexes.Count; i++)
+            {
+                var pathYear = Path.Combine(path, ExtractYear(NewFiles[TagIndexes[i]]));
+                var sourcePath = Path.Combine(pathYear, NewFiles[TagIndexes[i]].Name);
+
+                var destFolder = Path.Combine(pathYear, form.txt_tag.Text);
+                Directory.CreateDirectory(destFolder);
+
+                var destPath = Path.Combine(destFolder, NewFiles[TagIndexes[i]].Name);
+
+                //Directory.Move(sourcePath, destPath);
+                File.Copy(sourcePath, destPath, true);
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
+                File.Delete(sourcePath);
+
+                NewFiles.RemoveAt(TagIndexes[i]);
+                form.clb_media.Items.RemoveAt(i);
+                MediaIndex = 0;
+            }
+            TagIndexes.Clear();
+            MediaPreview(form);            
         }
     }
 }

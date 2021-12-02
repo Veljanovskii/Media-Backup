@@ -34,6 +34,8 @@ namespace Media_Backup
             _mp = new MediaPlayer(_libVLC);
             videoView.MediaPlayer = _mp;
             grb_preview.Controls.Add(videoView);
+
+            clb_media.CheckOnClick = true;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -131,6 +133,30 @@ namespace Media_Backup
             videoView.Dispose();
             _mp.Dispose();
             _libVLC.Dispose();
+        }
+
+        private void btn_tag_Click(object sender, EventArgs e)
+        {
+            if (txt_tag.Text != "")
+            {
+                if (proxy.TagIndexes.Count == 0)
+                {
+                    MessageBox.Show("No media were selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+
+                proxy.MoveMedia(this);                
+            }
+            else
+            {
+                MessageBox.Show("No valid tag was entered", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+        }
+
+        private void clb_media_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            proxy.TagIndexes.Clear();
+            proxy.TagIndexes = clb_media.CheckedIndices.Cast<int>().ToList();
         }
     }
 }

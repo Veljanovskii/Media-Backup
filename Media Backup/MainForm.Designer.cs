@@ -185,6 +185,7 @@ namespace Media_Backup
             this.btn_tag.TabStop = false;
             this.btn_tag.Text = "Add tag";
             this.btn_tag.UseVisualStyleBackColor = true;
+            this.btn_tag.Click += new System.EventHandler(this.btn_tag_Click);
             // 
             // lbl_tag
             // 
@@ -257,6 +258,7 @@ namespace Media_Backup
             this.clb_media.Name = "clb_media";
             this.clb_media.Size = new System.Drawing.Size(350, 136);
             this.clb_media.TabIndex = 14;
+            this.clb_media.SelectedIndexChanged += new System.EventHandler(this.clb_media_SelectedIndexChanged);
             // 
             // MainForm
             // 
@@ -295,7 +297,6 @@ namespace Media_Backup
         #endregion
         public System.Windows.Forms.GroupBox grb_preview;
         public System.Windows.Forms.PictureBox pcb_image;
-        private System.Windows.Forms.TextBox txt_tag;
         private System.Windows.Forms.Button btn_tag;
         public System.Windows.Forms.Label lbl_count;
         public System.Windows.Forms.Button btn_start;
@@ -312,6 +313,7 @@ namespace Media_Backup
         public System.Windows.Forms.Label lbl_datetime;
         public System.Windows.Forms.TrackBar trb_time;
         public System.Windows.Forms.Label lbl_selected;
+        public System.Windows.Forms.TextBox txt_tag;
     }
 }
 
