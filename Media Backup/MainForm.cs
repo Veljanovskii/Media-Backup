@@ -54,10 +54,11 @@ namespace Media_Backup
             /*Accessing data from the device*/
             proxy.TransferMedia();
 
+            /*Fill checklist*/
+            proxy.FillMediaList(this);
+
             /*Media preview*/            
             proxy.MediaPreview(this);
-
-            proxy.FillMediaList(this);
         }
 
         private void btn_right_Click(object sender, EventArgs e)
@@ -121,6 +122,8 @@ namespace Media_Backup
         private void trb_time_Scroll(object sender, EventArgs e)
         {
             lbl_trackbar.Text = trb_time.Value + " minutes";
+            proxy.MinutesRange = trb_time.Value;
+            proxy.FindInRange(this);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

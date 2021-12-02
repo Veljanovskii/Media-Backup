@@ -30,6 +30,7 @@ namespace Media_Backup
         private void InitializeComponent()
         {
             this.grb_preview = new System.Windows.Forms.GroupBox();
+            this.lbl_datetime = new System.Windows.Forms.Label();
             this.lbl_counter = new System.Windows.Forms.Label();
             this.lbl_media = new System.Windows.Forms.Label();
             this.pcb_image = new System.Windows.Forms.PictureBox();
@@ -47,7 +48,6 @@ namespace Media_Backup
             this.grb_tags = new System.Windows.Forms.GroupBox();
             this.lbl_selected = new System.Windows.Forms.Label();
             this.clb_media = new System.Windows.Forms.CheckedListBox();
-            this.lbl_datetime = new System.Windows.Forms.Label();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).BeginInit();
@@ -68,6 +68,16 @@ namespace Media_Backup
             this.grb_preview.TabIndex = 1;
             this.grb_preview.TabStop = false;
             this.grb_preview.Text = "Media preview";
+            // 
+            // lbl_datetime
+            // 
+            this.lbl_datetime.AutoSize = true;
+            this.lbl_datetime.Location = new System.Drawing.Point(31, 475);
+            this.lbl_datetime.Name = "lbl_datetime";
+            this.lbl_datetime.Size = new System.Drawing.Size(42, 20);
+            this.lbl_datetime.TabIndex = 3;
+            this.lbl_datetime.Text = "Time";
+            this.lbl_datetime.Visible = false;
             // 
             // lbl_counter
             // 
@@ -248,16 +258,6 @@ namespace Media_Backup
             this.clb_media.Size = new System.Drawing.Size(350, 136);
             this.clb_media.TabIndex = 14;
             // 
-            // lbl_datetime
-            // 
-            this.lbl_datetime.AutoSize = true;
-            this.lbl_datetime.Location = new System.Drawing.Point(31, 475);
-            this.lbl_datetime.Name = "lbl_datetime";
-            this.lbl_datetime.Size = new System.Drawing.Size(42, 20);
-            this.lbl_datetime.TabIndex = 3;
-            this.lbl_datetime.Text = "Time";
-            this.lbl_datetime.Visible = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -303,15 +303,15 @@ namespace Media_Backup
         public System.Windows.Forms.Button btn_left;
         public System.Windows.Forms.Button btn_right;
         private System.Windows.Forms.Label lbl_tag;
-        private System.Windows.Forms.TrackBar trb_time;
         private System.Windows.Forms.Label lbl_time;
         private System.Windows.Forms.Label lbl_trackbar;
         public System.Windows.Forms.Label lbl_media;
         private System.Windows.Forms.GroupBox grb_tags;
         public System.Windows.Forms.CheckedListBox clb_media;
-        private System.Windows.Forms.Label lbl_selected;
         public System.Windows.Forms.Label lbl_counter;
         public System.Windows.Forms.Label lbl_datetime;
+        public System.Windows.Forms.TrackBar trb_time;
+        public System.Windows.Forms.Label lbl_selected;
     }
 }
 

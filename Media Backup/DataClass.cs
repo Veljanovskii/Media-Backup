@@ -22,6 +22,8 @@ namespace Media_Backup
         public IList<MediaDevices.MediaFileInfo> NewFiles { get; set; }
         public int MediaIndex { get; set; }
         public bool IsPlaying { get; set; }
+        public int MinutesRange { get; set; }
+        public IList<int> TagIndexes { get; set; }
 
 
         public DataClass()
@@ -29,6 +31,8 @@ namespace Media_Backup
             NewFiles = new List<MediaDevices.MediaFileInfo>();
             MediaIndex = 0;
             IsPlaying = false;
+            MinutesRange = 2;
+            TagIndexes = new List<int>();
         }
 
         public IEnumerable<MediaDevice> GetDevices()
@@ -118,7 +122,7 @@ namespace Media_Backup
                 WriteStreamToDisc(Path.Combine(filePath, file.Name), memoryStream);
 
                 BarForm.SetProgress(progress++);
-                BarForm.lbl_progress.Text = $@"Transferring...{progress}/{NewFiles.Count} ({Math.Round((double)progress / NewFiles.Count * 100)}%)";
+                BarForm.lbl_progress.Text = $@"Transferring... {progress}/{NewFiles.Count} ({Math.Round((double)progress / NewFiles.Count * 100)}%)";
             }
             BarForm.Close();
             MediaDevice.Disconnect();
@@ -213,6 +217,8 @@ namespace Media_Backup
                 form._mp.Play(new Media(form._libVLC, path));
                 IsPlaying = true;
             }
+
+            FindInRange(form);
         }
 
         private void LabelMessage(MainForm form)
@@ -238,6 +244,64 @@ namespace Media_Backup
         {
             foreach (var item in NewFiles)
                 form.clb_media.Items.Add(item.Name);
+        }
+
+        internal void FindInRange(MainForm form)
+        {
+            TagIndexes.Clear();
+
+            if (UseFileName == true)
+            {
+                /*Extract info from file name*/
+                for (int i = 0; i < NewFiles.Count; i++)
+                {
+                    if (CheckRangeString(ExtractDateTime(NewFiles[MediaIndex]), ExtractDateTime(NewFiles[i])) == true)
+                    {
+                        TagIndexes.Add(i);
+                    }
+                }
+            }
+            else
+            {
+                /*Extract info from metadata*/
+                for (int i = 0; i < NewFiles.Count; i++)
+                {
+                    if (CheckRangeDateTime(NewFiles[MediaIndex].LastWriteTime.Value, NewFiles[i].LastWriteTime.Value) == true)
+                    {
+                        TagIndexes.Add(i);
+                    }
+                }
+            }
+
+            /*Uncheck all*/
+            for (int i = 0; i < NewFiles.Count; i++)
+            {
+                form.clb_media.SetItemChecked(i, false);
+            }
+
+            /*Check selected*/
+            for (int i = 0; i < TagIndexes.Count; i++)
+            {
+                form.clb_media.SetItemChecked(TagIndexes[i], true);
+            }
+
+            form.lbl_selected.Visible = true;
+            form.lbl_selected.Text = TagIndexes.Count + " media selected";
+        }
+
+        private bool CheckRangeDateTime(DateTime value1, DateTime value2)
+        {
+            TimeSpan span = value1 - value2;
+
+            return Math.Abs(span.TotalMinutes) <= MinutesRange;
+        }
+
+        private bool CheckRangeString(string v1, string v2)
+        {
+            DateTime value1 = DateTime.ParseExact(v1, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime value2 = DateTime.ParseExact(v2, "dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            return CheckRangeDateTime(value1, value2);
         }
     }
 }
