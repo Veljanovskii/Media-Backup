@@ -23,7 +23,7 @@ namespace Media_Backup
         public int MediaIndex { get; set; }
         public bool IsPlaying { get; set; }
         public int MinutesRange { get; set; }
-        public IList<int> TagIndexes { get; set; }
+        public List<int> TagIndexes { get; set; }
 
         public Bitmap image { get; set; }
 
@@ -180,7 +180,7 @@ namespace Media_Backup
             
             form.lbl_media.Visible = true;
             form.lbl_media.Text = NewFiles.ElementAt(MediaIndex).Name;
-            form._mp.Pause();
+            //form._mp.Pause();
             IsPlaying = false;
 
             /*Image preview*/
@@ -210,8 +210,8 @@ namespace Media_Backup
                 form.videoView.Visible = true;
                 form.videoView.Location = new Point(6, 66);
                 form.videoView.Size = new Size(520, 390);
-                form._mp.Volume = 0;
                 form._mp.Play(new Media(form._libVLC, path));
+                form._mp.Volume = 0;
                 IsPlaying = true;
             }
 
@@ -286,15 +286,17 @@ namespace Media_Backup
             String path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
 
             image.Dispose();
+            form._mp.Dispose();
 
-            for (int i = 0; i < TagIndexes.Count; i++)
+            TagIndexes.Sort();
+
+            for (int i = TagIndexes.Count - 1; i >= 0; i--) 
             {
                 var pathYear = Path.Combine(path, ExtractYear(NewFiles[TagIndexes[i]]));
                 var sourcePath = Path.Combine(pathYear, NewFiles[TagIndexes[i]].Name);
-
                 var destFolder = Path.Combine(pathYear, form.txt_tag.Text);
-                Directory.CreateDirectory(destFolder);
 
+                Directory.CreateDirectory(destFolder);
                 var destPath = Path.Combine(destFolder, NewFiles[TagIndexes[i]].Name);
 
                 //Directory.Move(sourcePath, destPath);
@@ -304,10 +306,11 @@ namespace Media_Backup
                 File.Delete(sourcePath);
 
                 NewFiles.RemoveAt(TagIndexes[i]);
-                form.clb_media.Items.RemoveAt(i);
-                MediaIndex = 0;
+                form.clb_media.Items.RemoveAt(TagIndexes[i]);
+                //form.clb_media.Items.rem
             }
             TagIndexes.Clear();
+            MediaIndex = 0;
             MediaPreview(form);            
         }
     }

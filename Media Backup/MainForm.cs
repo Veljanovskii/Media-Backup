@@ -145,7 +145,8 @@ namespace Media_Backup
                     return;
                 }
 
-                proxy.MoveMedia(this);                
+                proxy.MoveMedia(this);
+                txt_tag.Text = "";
             }
             else
             {
@@ -157,6 +158,7 @@ namespace Media_Backup
         {
             proxy.TagIndexes.Clear();
             proxy.TagIndexes = clb_media.CheckedIndices.Cast<int>().ToList();
+            lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
         }
     }
 }
