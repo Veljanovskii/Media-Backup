@@ -48,6 +48,7 @@ namespace Media_Backup
             this.grb_tags = new System.Windows.Forms.GroupBox();
             this.lbl_selected = new System.Windows.Forms.Label();
             this.clb_media = new System.Windows.Forms.CheckedListBox();
+            this.chb_checkall = new System.Windows.Forms.CheckBox();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).BeginInit();
@@ -60,7 +61,7 @@ namespace Media_Backup
             this.grb_preview.Controls.Add(this.lbl_counter);
             this.grb_preview.Controls.Add(this.lbl_media);
             this.grb_preview.Controls.Add(this.pcb_image);
-            this.grb_preview.Location = new System.Drawing.Point(12, 48);
+            this.grb_preview.Location = new System.Drawing.Point(12, 66);
             this.grb_preview.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.grb_preview.Name = "grb_preview";
             this.grb_preview.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -111,7 +112,7 @@ namespace Media_Backup
             // 
             // btn_start
             // 
-            this.btn_start.Location = new System.Drawing.Point(180, 580);
+            this.btn_start.Location = new System.Drawing.Point(180, 600);
             this.btn_start.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_start.Name = "btn_start";
             this.btn_start.Size = new System.Drawing.Size(37, 29);
@@ -123,7 +124,7 @@ namespace Media_Backup
             // 
             // btn_end
             // 
-            this.btn_end.Location = new System.Drawing.Point(320, 580);
+            this.btn_end.Location = new System.Drawing.Point(320, 600);
             this.btn_end.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_end.Name = "btn_end";
             this.btn_end.Size = new System.Drawing.Size(37, 29);
@@ -135,7 +136,7 @@ namespace Media_Backup
             // 
             // btn_left
             // 
-            this.btn_left.Location = new System.Drawing.Point(220, 580);
+            this.btn_left.Location = new System.Drawing.Point(220, 600);
             this.btn_left.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_left.Name = "btn_left";
             this.btn_left.Size = new System.Drawing.Size(37, 29);
@@ -147,7 +148,7 @@ namespace Media_Backup
             // 
             // btn_right
             // 
-            this.btn_right.Location = new System.Drawing.Point(280, 580);
+            this.btn_right.Location = new System.Drawing.Point(280, 600);
             this.btn_right.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_right.Name = "btn_right";
             this.btn_right.Size = new System.Drawing.Size(37, 29);
@@ -160,7 +161,7 @@ namespace Media_Backup
             // lbl_count
             // 
             this.lbl_count.AutoSize = true;
-            this.lbl_count.Location = new System.Drawing.Point(586, 48);
+            this.lbl_count.Location = new System.Drawing.Point(162, 27);
             this.lbl_count.Name = "lbl_count";
             this.lbl_count.Size = new System.Drawing.Size(155, 20);
             this.lbl_count.TabIndex = 6;
@@ -168,7 +169,7 @@ namespace Media_Backup
             // 
             // txt_tag
             // 
-            this.txt_tag.Location = new System.Drawing.Point(102, 209);
+            this.txt_tag.Location = new System.Drawing.Point(102, 191);
             this.txt_tag.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_tag.Name = "txt_tag";
             this.txt_tag.Size = new System.Drawing.Size(125, 27);
@@ -177,7 +178,7 @@ namespace Media_Backup
             // 
             // btn_tag
             // 
-            this.btn_tag.Location = new System.Drawing.Point(30, 256);
+            this.btn_tag.Location = new System.Drawing.Point(256, 190);
             this.btn_tag.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_tag.Name = "btn_tag";
             this.btn_tag.Size = new System.Drawing.Size(94, 29);
@@ -190,7 +191,7 @@ namespace Media_Backup
             // lbl_tag
             // 
             this.lbl_tag.AutoSize = true;
-            this.lbl_tag.Location = new System.Drawing.Point(30, 212);
+            this.lbl_tag.Location = new System.Drawing.Point(30, 194);
             this.lbl_tag.Name = "lbl_tag";
             this.lbl_tag.Size = new System.Drawing.Size(35, 20);
             this.lbl_tag.TabIndex = 9;
@@ -234,9 +235,9 @@ namespace Media_Backup
             this.grb_tags.Controls.Add(this.txt_tag);
             this.grb_tags.Controls.Add(this.btn_tag);
             this.grb_tags.Controls.Add(this.lbl_tag);
-            this.grb_tags.Location = new System.Drawing.Point(569, 103);
+            this.grb_tags.Location = new System.Drawing.Point(569, 66);
             this.grb_tags.Name = "grb_tags";
-            this.grb_tags.Size = new System.Drawing.Size(407, 321);
+            this.grb_tags.Size = new System.Drawing.Size(407, 243);
             this.grb_tags.TabIndex = 13;
             this.grb_tags.TabStop = false;
             this.grb_tags.Text = "Manage tags";
@@ -244,7 +245,7 @@ namespace Media_Backup
             // lbl_selected
             // 
             this.lbl_selected.AutoSize = true;
-            this.lbl_selected.Location = new System.Drawing.Point(30, 156);
+            this.lbl_selected.Location = new System.Drawing.Point(30, 142);
             this.lbl_selected.Name = "lbl_selected";
             this.lbl_selected.Size = new System.Drawing.Size(120, 20);
             this.lbl_selected.TabIndex = 13;
@@ -254,17 +255,30 @@ namespace Media_Backup
             // clb_media
             // 
             this.clb_media.FormattingEnabled = true;
-            this.clb_media.Location = new System.Drawing.Point(569, 442);
+            this.clb_media.Location = new System.Drawing.Point(569, 361);
             this.clb_media.Name = "clb_media";
-            this.clb_media.Size = new System.Drawing.Size(350, 136);
+            this.clb_media.Size = new System.Drawing.Size(350, 268);
             this.clb_media.TabIndex = 14;
             this.clb_media.SelectedIndexChanged += new System.EventHandler(this.clb_media_SelectedIndexChanged);
+            this.clb_media.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clb_media_MouseDown);
+            // 
+            // chb_checkall
+            // 
+            this.chb_checkall.AutoSize = true;
+            this.chb_checkall.Location = new System.Drawing.Point(569, 331);
+            this.chb_checkall.Name = "chb_checkall";
+            this.chb_checkall.Size = new System.Drawing.Size(90, 24);
+            this.chb_checkall.TabIndex = 15;
+            this.chb_checkall.Text = "Check all";
+            this.chb_checkall.UseVisualStyleBackColor = true;
+            this.chb_checkall.CheckedChanged += new System.EventHandler(this.chb_checkall_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1015, 648);
+            this.ClientSize = new System.Drawing.Size(1015, 659);
+            this.Controls.Add(this.chb_checkall);
             this.Controls.Add(this.clb_media);
             this.Controls.Add(this.grb_tags);
             this.Controls.Add(this.btn_start);
@@ -314,6 +328,7 @@ namespace Media_Backup
         public System.Windows.Forms.TrackBar trb_time;
         public System.Windows.Forms.Label lbl_selected;
         public System.Windows.Forms.TextBox txt_tag;
+        private System.Windows.Forms.CheckBox chb_checkall;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using LibVLCSharp.Shared;
+using LibVLCSharp.WinForms;
 using MediaDevices;
 using System;
 using System.Collections.Generic;
@@ -150,17 +151,18 @@ namespace Media_Backup
         public void MediaPreview(MainForm form)
         {
             /*Buttons settings*/
-            form.btn_start.Location = new Point(180, 580);
-            form.btn_left.Location = new Point(220, 580);
-            form.btn_right.Location = new Point(280, 580);
-            form.btn_end.Location = new Point(320, 580);
+            form.btn_start.Location = new Point(180, 600);
+            form.btn_left.Location = new Point(220, 600);
+            form.btn_right.Location = new Point(280, 600);
+            form.btn_end.Location = new Point(320, 600);
 
             /*Groupbox*/
-            form.grb_preview.Location = new Point(12, 48);
+            form.grb_preview.Location = new Point(12, 66);
             form.grb_preview.Visible = true;
             form.grb_preview.Size = new Size(532, 520);
 
-            form.videoView.Visible = false;
+            if (form.videoView != null) 
+                form.videoView.Visible = false;
             form.pcb_image.Visible = false;
 
             /*Shows new media count*/
@@ -180,8 +182,10 @@ namespace Media_Backup
             
             form.lbl_media.Visible = true;
             form.lbl_media.Text = NewFiles.ElementAt(MediaIndex).Name;
-            //form._mp.Pause();
             IsPlaying = false;
+
+            form.clb_media.SelectedIndex = MediaIndex;
+            form.clb_media.Focus();
 
             /*Image preview*/
             if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
@@ -207,6 +211,13 @@ namespace Media_Backup
             else if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
             {
                 /*VLC settings*/
+
+                form._libVLC = new LibVLC();
+                form.videoView = new VideoView();
+                form._mp = new MediaPlayer(form._libVLC);
+                form.videoView.MediaPlayer = form._mp;
+                form.grb_preview.Controls.Add(form.videoView);
+
                 form.videoView.Visible = true;
                 form.videoView.Location = new Point(6, 66);
                 form.videoView.Size = new Size(520, 390);
@@ -286,6 +297,9 @@ namespace Media_Backup
             String path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
 
             image.Dispose();
+            form.grb_preview.Controls.Remove(form.videoView);
+            form._libVLC.Dispose();
+            form.videoView.Dispose();
             form._mp.Dispose();
 
             TagIndexes.Sort();
@@ -299,15 +313,13 @@ namespace Media_Backup
                 Directory.CreateDirectory(destFolder);
                 var destPath = Path.Combine(destFolder, NewFiles[TagIndexes[i]].Name);
 
-                //Directory.Move(sourcePath, destPath);
                 File.Copy(sourcePath, destPath, true);
-                System.GC.Collect();
-                System.GC.WaitForPendingFinalizers();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
                 File.Delete(sourcePath);
 
                 NewFiles.RemoveAt(TagIndexes[i]);
                 form.clb_media.Items.RemoveAt(TagIndexes[i]);
-                //form.clb_media.Items.rem
             }
             TagIndexes.Clear();
             MediaIndex = 0;

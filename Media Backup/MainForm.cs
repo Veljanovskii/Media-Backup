@@ -29,12 +29,7 @@ namespace Media_Backup
 
             /*VLC Media player*/
             Core.Initialize();
-            _libVLC = new LibVLC();
-            videoView = new VideoView();
-            _mp = new MediaPlayer(_libVLC);
-            videoView.MediaPlayer = _mp;
-            grb_preview.Controls.Add(videoView);
-
+            
             clb_media.CheckOnClick = true;
         }
 
@@ -130,9 +125,12 @@ namespace Media_Backup
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            videoView.Dispose();
-            _mp.Dispose();
-            _libVLC.Dispose();
+            if (videoView != null) 
+                videoView.Dispose();
+            if (_mp != null) 
+                _mp.Dispose();
+            if (_libVLC != null)
+                _libVLC.Dispose();
         }
 
         private void btn_tag_Click(object sender, EventArgs e)
@@ -158,6 +156,48 @@ namespace Media_Backup
         {
             proxy.TagIndexes.Clear();
             proxy.TagIndexes = clb_media.CheckedIndices.Cast<int>().ToList();
+            lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
+
+            //TODO
+            clb_media.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+        }
+
+        private void clb_media_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = clb_media.IndexFromPoint(e.Location);
+                {
+                    if (index != clb_media.SelectedIndex)
+                    {
+                        proxy.MediaIndex = index;
+                        proxy.MediaPreview(this);
+                    }
+                }
+            }
+        }
+
+        private void chb_checkall_CheckedChanged(object sender, EventArgs e)
+        {
+            proxy.TagIndexes.Clear();
+
+            if (chb_checkall.Checked)
+            {
+                for (int i = 0; i < clb_media.Items.Count; i++)
+                {
+                    clb_media.SetItemChecked(i, true);
+                    proxy.TagIndexes.Add(i);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < clb_media.Items.Count; i++)
+                {
+                    clb_media.SetItemChecked(i, false);
+                }
+                proxy.TagIndexes.Clear();
+            }
+
             lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
         }
     }
