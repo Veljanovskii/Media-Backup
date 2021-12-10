@@ -49,6 +49,7 @@ namespace Media_Backup
             this.lbl_selected = new System.Windows.Forms.Label();
             this.clb_media = new System.Windows.Forms.CheckedListBox();
             this.chb_checkall = new System.Windows.Forms.CheckBox();
+            this.btn_delete = new System.Windows.Forms.Button();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).BeginInit();
@@ -273,11 +274,21 @@ namespace Media_Backup
             this.chb_checkall.UseVisualStyleBackColor = true;
             this.chb_checkall.CheckedChanged += new System.EventHandler(this.chb_checkall_CheckedChanged);
             // 
+            // btn_delete
+            // 
+            this.btn_delete.Location = new System.Drawing.Point(424, 600);
+            this.btn_delete.Name = "btn_delete";
+            this.btn_delete.Size = new System.Drawing.Size(94, 29);
+            this.btn_delete.TabIndex = 16;
+            this.btn_delete.Text = "Delete";
+            this.btn_delete.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1015, 659);
+            this.ClientSize = new System.Drawing.Size(1017, 668);
+            this.Controls.Add(this.btn_delete);
             this.Controls.Add(this.chb_checkall);
             this.Controls.Add(this.clb_media);
             this.Controls.Add(this.grb_tags);
@@ -329,6 +340,7 @@ namespace Media_Backup
         public System.Windows.Forms.Label lbl_selected;
         public System.Windows.Forms.TextBox txt_tag;
         private System.Windows.Forms.CheckBox chb_checkall;
+        private System.Windows.Forms.Button btn_delete;
     }
 }
 

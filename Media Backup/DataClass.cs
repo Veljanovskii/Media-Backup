@@ -25,16 +25,18 @@ namespace Media_Backup
         public bool IsPlaying { get; set; }
         public int MinutesRange { get; set; }
         public List<int> TagIndexes { get; set; }
-
         public Bitmap image { get; set; }
+        public LibVLC _libVLC;
+        public MediaPlayer _mp;
+        public VideoView videoView;
 
         public DataClass()
         {
             NewFiles = new List<MediaDevices.MediaFileInfo>();
             MediaIndex = 0;
-            IsPlaying = false;
             MinutesRange = 2;
             TagIndexes = new List<int>();
+            IsPlaying = false;
         }
 
         public IEnumerable<MediaDevice> GetDevices()
@@ -161,8 +163,8 @@ namespace Media_Backup
             form.grb_preview.Visible = true;
             form.grb_preview.Size = new Size(532, 520);
 
-            if (form.videoView != null) 
-                form.videoView.Visible = false;
+            if (videoView != null) 
+                videoView.Visible = false;
             form.pcb_image.Visible = false;
 
             /*Shows new media count*/
@@ -212,17 +214,17 @@ namespace Media_Backup
             {
                 /*VLC settings*/
 
-                form._libVLC = new LibVLC();
-                form.videoView = new VideoView();
-                form._mp = new MediaPlayer(form._libVLC);
-                form.videoView.MediaPlayer = form._mp;
-                form.grb_preview.Controls.Add(form.videoView);
+                _libVLC = new LibVLC();
+                videoView = new VideoView();
+                _mp = new MediaPlayer(_libVLC);
+                videoView.MediaPlayer = _mp;
+                form.grb_preview.Controls.Add(videoView);
 
-                form.videoView.Visible = true;
-                form.videoView.Location = new Point(6, 66);
-                form.videoView.Size = new Size(520, 390);
-                form._mp.Play(new Media(form._libVLC, path));
-                form._mp.Volume = 0;
+                videoView.Visible = true;
+                videoView.Location = new Point(6, 66);
+                videoView.Size = new Size(520, 390);
+                _mp.Play(new Media(_libVLC, path));
+                _mp.Volume = 0;
                 IsPlaying = true;
             }
 
@@ -296,20 +298,24 @@ namespace Media_Backup
         {
             String path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
 
-            image.Dispose();
-            form.grb_preview.Controls.Remove(form.videoView);
-            form._libVLC.Dispose();
-            form.videoView.Dispose();
-            form._mp.Dispose();
+            if (image != null) 
+                image.Dispose();
+            if (videoView != null)
+            {
+                form.grb_preview.Controls.Remove(videoView);
+                _libVLC.Dispose();
+                videoView.Dispose();
+                _mp.Dispose();
+            }
 
             TagIndexes.Sort();
-
+            
             for (int i = TagIndexes.Count - 1; i >= 0; i--) 
             {
                 var pathYear = Path.Combine(path, ExtractYear(NewFiles[TagIndexes[i]]));
                 var sourcePath = Path.Combine(pathYear, NewFiles[TagIndexes[i]].Name);
                 var destFolder = Path.Combine(pathYear, form.txt_tag.Text);
-
+                                
                 Directory.CreateDirectory(destFolder);
                 var destPath = Path.Combine(destFolder, NewFiles[TagIndexes[i]].Name);
 

@@ -16,20 +16,13 @@ namespace Media_Backup
 {
     public partial class MainForm : Form
     {
-        public DataClass proxy { get; set; }
-
-        public LibVLC _libVLC;
-        public MediaPlayer _mp;
-        public VideoView videoView;
+        public DataClass proxy { get; set; }        
 
         public MainForm()
         {
             InitializeComponent();
             proxy = new DataClass();
-
-            /*VLC Media player*/
-            Core.Initialize();
-            
+            Core.Initialize();            
             clb_media.CheckOnClick = true;
         }
 
@@ -96,12 +89,12 @@ namespace Media_Backup
                 case Keys.Add:
                     if (proxy.IsPlaying == true)
                     {
-                        _mp.Pause();
+                        proxy._mp.Pause();
                         proxy.IsPlaying = false;
                     }
                     else
                     {
-                        _mp.Play();
+                        proxy._mp.Play();
                         proxy.IsPlaying = true;
                     }
                     break;
@@ -125,12 +118,12 @@ namespace Media_Backup
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (videoView != null) 
-                videoView.Dispose();
-            if (_mp != null) 
-                _mp.Dispose();
-            if (_libVLC != null)
-                _libVLC.Dispose();
+            if (proxy.videoView != null) 
+                proxy.videoView.Dispose();
+            if (proxy._mp != null)
+                proxy._mp.Dispose();
+            if (proxy._libVLC != null)
+                proxy._libVLC.Dispose();
         }
 
         private void btn_tag_Click(object sender, EventArgs e)
@@ -158,8 +151,11 @@ namespace Media_Backup
             proxy.TagIndexes = clb_media.CheckedIndices.Cast<int>().ToList();
             lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
 
-            //TODO
-            clb_media.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            ////TODO
+            //clb_media.SetItemColor(1, Color.Red);
+
+            //ImprovedCheckedListBox lmao = new ImprovedCheckedListBox();
+            //lmao.SetItemColor
         }
 
         private void clb_media_MouseDown(object sender, MouseEventArgs e)
@@ -199,6 +195,85 @@ namespace Media_Backup
             }
 
             lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
+        }
+    }
+
+    public class ImprovedCheckedListBox : CheckedListBox
+    {
+        private Color highlight = SystemColors.Highlight;
+        private IDictionary<int, Color> colorList;
+
+        public ImprovedCheckedListBox()
+        {
+            DrawMode = DrawMode.OwnerDrawFixed;
+
+            this.colorList = new Dictionary<int, Color>();
+        }
+
+        protected override void OnDrawItem(DrawItemEventArgs e)
+        {
+            if (this.Font.Height < 0)
+                this.Font = Control.DefaultFont;
+
+            if (e.Index < 0)
+                return;
+
+            if (this.Items.Count == 0)
+            {
+                return;
+            }
+
+            Rectangle rect = base.GetItemRectangle(e.Index);
+
+            Color highlight;
+            if ((this.SelectionMode != SelectionMode.None) && ((e.State & DrawItemState.Selected) == DrawItemState.Selected))
+                highlight = this.highlight;
+            else
+                highlight = this.BackColor;
+
+            using (Brush brush = new SolidBrush(highlight))
+            {
+                e.Graphics.FillRectangle(brush, rect);
+            }
+
+            Color textColor = Color.Empty;
+            if (colorList.Count > 0)
+            {
+                if ((this.SelectionMode != SelectionMode.None) && ((e.State & DrawItemState.Selected) != DrawItemState.Selected))
+                {
+                    textColor = GetItemColor(e.Index);
+
+                    if (textColor.IsEmpty)
+                    {
+                        textColor = base.ForeColor;
+                    }
+                }
+                else
+                {
+                    textColor = GetItemColor(e.Index);
+                }
+            }
+
+            string text = this.Items[e.Index].ToString();
+
+            TextRenderer.DrawText(e.Graphics, text, this.Font, rect, textColor, TextFormatFlags.GlyphOverhangPadding);
+        }
+
+        public void SetItemColor(int index, Color color)
+        {
+            colorList.Add(index, color);
+        }
+
+        public Color GetItemColor(int index)
+        {
+            if (colorList.ContainsKey(index))
+            {
+                return colorList[index];
+            }
+            else
+            {
+                return base.ForeColor;
+            }
         }
     }
 }
