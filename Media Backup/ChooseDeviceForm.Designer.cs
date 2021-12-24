@@ -100,7 +100,7 @@ namespace Media_Backup
             this.btn_dest.Name = "btn_dest";
             this.btn_dest.Size = new System.Drawing.Size(94, 29);
             this.btn_dest.TabIndex = 5;
-            this.btn_dest.Text = "Change";
+            this.btn_dest.Text = "Browse";
             this.btn_dest.UseVisualStyleBackColor = true;
             this.btn_dest.Click += new System.EventHandler(this.btn_dest_Click);
             // 
@@ -182,7 +182,7 @@ namespace Media_Backup
             this.btn_source.Name = "btn_source";
             this.btn_source.Size = new System.Drawing.Size(94, 29);
             this.btn_source.TabIndex = 5;
-            this.btn_source.Text = "Change";
+            this.btn_source.Text = "Browse";
             this.btn_source.UseVisualStyleBackColor = true;
             this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
             // 

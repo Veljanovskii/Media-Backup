@@ -196,6 +196,11 @@ namespace Media_Backup
 
             lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
         }
+
+        private void btn_delete_Click(object sender, EventArgs e)
+        {
+            proxy.DeleteCurrentMedia(this);
+        }
     }
 
     public class ImprovedCheckedListBox : CheckedListBox

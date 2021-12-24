@@ -72,6 +72,7 @@ namespace Media_Backup
         public void TransferMedia()
         {
             /*Accessing data from the device*/
+            Cursor.Current = Cursors.WaitCursor;
             MediaDirectoryInfo photoDir = null;
             try
             {
@@ -81,6 +82,7 @@ namespace Media_Backup
             catch(Exception e)
             {
                 var result = MessageBox.Show(e.Message, "Unable to connect to the device", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Cursor.Current = Cursors.Default;
                 if (result == DialogResult.OK)
                     Environment.Exit(0);
             }
@@ -124,6 +126,7 @@ namespace Media_Backup
             }
             BarForm.Close();
             MediaDevice.Disconnect();
+            Cursor.Current = Cursors.Default;
         }
 
         private string ExtractYear(MediaFileInfo file)
@@ -169,6 +172,9 @@ namespace Media_Backup
 
             /*Shows new media count*/
             LabelMessage(form);
+            form.lbl_datetime.Visible = false;
+            form.lbl_counter.Visible = false;
+            form.lbl_media.Visible = false;
 
             if (NewFiles.Count == 0)
                 return;
@@ -229,6 +235,31 @@ namespace Media_Backup
             }
 
             FindInRange(form);
+        }
+
+        internal void DeleteCurrentMedia(MainForm form)
+        {
+            if (image != null)
+                image.Dispose();
+
+            if (videoView != null)
+            {
+                form.grb_preview.Controls.Remove(videoView);
+                _libVLC.Dispose();
+                videoView.Dispose();
+                videoView = null;
+                _mp.Dispose();
+            }
+
+            var path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles[MediaIndex]), NewFiles[MediaIndex].Name);
+            File.Delete(path);
+            NewFiles.RemoveAt(MediaIndex);
+            form.clb_media.Items.RemoveAt(MediaIndex);
+
+            if (MediaIndex > 0)
+                MediaIndex--;
+
+            MediaPreview(form);
         }
 
         private void LabelMessage(MainForm form)
@@ -296,17 +327,19 @@ namespace Media_Backup
 
         internal void MoveMedia(MainForm form)
         {
-            String path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
-
             if (image != null) 
                 image.Dispose();
+
             if (videoView != null)
             {
                 form.grb_preview.Controls.Remove(videoView);
                 _libVLC.Dispose();
                 videoView.Dispose();
+                videoView = null;
                 _mp.Dispose();
             }
+
+            String path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
 
             TagIndexes.Sort();
             
@@ -327,6 +360,7 @@ namespace Media_Backup
                 NewFiles.RemoveAt(TagIndexes[i]);
                 form.clb_media.Items.RemoveAt(TagIndexes[i]);
             }
+
             TagIndexes.Clear();
             MediaIndex = 0;
             MediaPreview(form);            
