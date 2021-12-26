@@ -43,6 +43,7 @@ namespace Media_Backup
             {
                 this.cmb_devices.Items.Add(Devices.ElementAt(i).FriendlyName);
             }
+
             cmb_devices.SelectedIndex = 0;
 
             lbl_source_path.MaximumSize = new Size(320, 0);

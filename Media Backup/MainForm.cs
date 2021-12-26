@@ -116,16 +116,6 @@ namespace Media_Backup
             proxy.FindInRange(this);
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (proxy.videoView != null) 
-                proxy.videoView.Dispose();
-            if (proxy._mp != null)
-                proxy._mp.Dispose();
-            if (proxy._libVLC != null)
-                proxy._libVLC.Dispose();
-        }
-
         private void btn_tag_Click(object sender, EventArgs e)
         {
             if (txt_tag.Text != "")
@@ -150,12 +140,6 @@ namespace Media_Backup
             proxy.TagIndexes.Clear();
             proxy.TagIndexes = clb_media.CheckedIndices.Cast<int>().ToList();
             lbl_selected.Text = proxy.TagIndexes.Count + " media selected";
-
-            ////TODO
-            //clb_media.SetItemColor(1, Color.Red);
-
-            //ImprovedCheckedListBox lmao = new ImprovedCheckedListBox();
-            //lmao.SetItemColor
         }
 
         private void clb_media_MouseDown(object sender, MouseEventArgs e)
@@ -201,84 +185,15 @@ namespace Media_Backup
         {
             proxy.DeleteCurrentMedia(this);
         }
-    }
 
-    public class ImprovedCheckedListBox : CheckedListBox
-    {
-        private Color highlight = SystemColors.Highlight;
-        private IDictionary<int, Color> colorList;
-
-        public ImprovedCheckedListBox()
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DrawMode = DrawMode.OwnerDrawFixed;
-
-            this.colorList = new Dictionary<int, Color>();
-        }
-
-        protected override void OnDrawItem(DrawItemEventArgs e)
-        {
-            if (this.Font.Height < 0)
-                this.Font = Control.DefaultFont;
-
-            if (e.Index < 0)
-                return;
-
-            if (this.Items.Count == 0)
-            {
-                return;
-            }
-
-            Rectangle rect = base.GetItemRectangle(e.Index);
-
-            Color highlight;
-            if ((this.SelectionMode != SelectionMode.None) && ((e.State & DrawItemState.Selected) == DrawItemState.Selected))
-                highlight = this.highlight;
-            else
-                highlight = this.BackColor;
-
-            using (Brush brush = new SolidBrush(highlight))
-            {
-                e.Graphics.FillRectangle(brush, rect);
-            }
-
-            Color textColor = Color.Empty;
-            if (colorList.Count > 0)
-            {
-                if ((this.SelectionMode != SelectionMode.None) && ((e.State & DrawItemState.Selected) != DrawItemState.Selected))
-                {
-                    textColor = GetItemColor(e.Index);
-
-                    if (textColor.IsEmpty)
-                    {
-                        textColor = base.ForeColor;
-                    }
-                }
-                else
-                {
-                    textColor = GetItemColor(e.Index);
-                }
-            }
-
-            string text = this.Items[e.Index].ToString();
-
-            TextRenderer.DrawText(e.Graphics, text, this.Font, rect, textColor, TextFormatFlags.GlyphOverhangPadding);
-        }
-
-        public void SetItemColor(int index, Color color)
-        {
-            colorList.Add(index, color);
-        }
-
-        public Color GetItemColor(int index)
-        {
-            if (colorList.ContainsKey(index))
-            {
-                return colorList[index];
-            }
-            else
-            {
-                return base.ForeColor;
-            }
+            if (proxy.videoView != null)
+                proxy.videoView.Dispose();
+            if (proxy._mp != null)
+                proxy._mp.Dispose();
+            if (proxy._libVLC != null)
+                proxy._libVLC.Dispose();
         }
     }
 }

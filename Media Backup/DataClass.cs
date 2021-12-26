@@ -155,20 +155,14 @@ namespace Media_Backup
 
         public void MediaPreview(MainForm form)
         {
-            /*Buttons settings*/
-            form.btn_start.Location = new Point(180, 600);
-            form.btn_left.Location = new Point(220, 600);
-            form.btn_right.Location = new Point(280, 600);
-            form.btn_end.Location = new Point(320, 600);
-
-            /*Groupbox*/
-            form.grb_preview.Location = new Point(12, 66);
-            form.grb_preview.Visible = true;
-            form.grb_preview.Size = new Size(532, 520);
-
-            if (videoView != null) 
-                videoView.Visible = false;
+            if (image != null) 
+                image.Dispose();
             form.pcb_image.Visible = false;
+
+            if (videoView != null)
+            {
+                videoView.Visible = false;
+            }
 
             /*Shows new media count*/
             LabelMessage(form);
