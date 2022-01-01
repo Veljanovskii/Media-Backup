@@ -23,19 +23,25 @@ namespace Media_Backup
         }
 
         private void ChooseDeviceForm_Load(object sender, EventArgs e)
-        {
-            /*Device detection, otherwise application will not run*/
-            while (Devices.Count() == 0)
+        {            
+            lbl_source_path.MaximumSize = new Size(320, 0);
+            lbl_source_path.AutoSize = true;
+            lbl_source_path.Text = @"\Internal storage\DCIM\Camera";
+
+            lbl_dest_path.MaximumSize = new Size(320, 0);
+            lbl_dest_path.AutoSize = true;
+            lbl_dest_path.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            if (Devices.Count() == 0) 
             {
-                var result = MessageBox.Show("No devices detected. Please plug in your device and try again.", "No active devices", MessageBoxButtons.RetryCancel);
-                if (result == DialogResult.Cancel)
-                {
-                    Application.Exit();
-                }
-                else if (result == DialogResult.Retry)
-                {
-                    Devices = Parent_Form.proxy.GetDevices();
-                }
+                lbl_source_path.Visible = false;
+                lbl_dest_path.Visible = false;
+                chb_metafiles.Enabled = false;
+                btn_ok.Enabled = false;
+                btn_source.Enabled = false;
+                btn_dest.Enabled = false;
+
+                return;
             }
 
             /*Setting up Combobox*/
@@ -44,15 +50,31 @@ namespace Media_Backup
                 this.cmb_devices.Items.Add(Devices.ElementAt(i).FriendlyName);
             }
 
-            cmb_devices.SelectedIndex = 0;
+            cmb_devices.SelectedIndex = 0;                      
+        }
 
-            lbl_source_path.MaximumSize = new Size(320, 0);
-            lbl_source_path.AutoSize = true;
-            lbl_source_path.Text = @"\Internal storage\DCIM\Camera";
+        private void btn_refresh_Click(object sender, EventArgs e)
+        {
+            if (Parent_Form.proxy.GetDevices().Count() == 0)
+                return;
+            else
+            {
+                this.Devices = Parent_Form.proxy.GetDevices();
 
-            lbl_dest_path.MaximumSize = new Size(320, 0);
-            lbl_dest_path.AutoSize = true;
-            lbl_dest_path.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);            
+                lbl_source_path.Visible = true;
+                lbl_dest_path.Visible = true;
+                chb_metafiles.Enabled = true;
+                btn_ok.Enabled = true;
+                btn_source.Enabled = true;
+                btn_dest.Enabled = true;
+
+                for (int i = 0; i < Devices.Count(); i++)
+                {
+                    this.cmb_devices.Items.Add(Devices.ElementAt(i).FriendlyName);
+                }
+
+                cmb_devices.SelectedIndex = 0;
+            }
         }
 
         private void btn_ok_Click(object sender, EventArgs e)

@@ -37,6 +37,7 @@ namespace Media_Backup
             this.btn_dest = new System.Windows.Forms.Button();
             this.lbl_dest_path = new System.Windows.Forms.Label();
             this.grb_device = new System.Windows.Forms.GroupBox();
+            this.btn_refresh = new System.Windows.Forms.Button();
             this.grb_dest = new System.Windows.Forms.GroupBox();
             this.chb_metafiles = new System.Windows.Forms.CheckBox();
             this.grb_source = new System.Windows.Forms.GroupBox();
@@ -67,7 +68,7 @@ namespace Media_Backup
             // 
             // btn_ok
             // 
-            this.btn_ok.Location = new System.Drawing.Point(12, 526);
+            this.btn_ok.Location = new System.Drawing.Point(12, 573);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(94, 29);
             this.btn_ok.TabIndex = 2;
@@ -77,7 +78,7 @@ namespace Media_Backup
             // 
             // btn_cancel
             // 
-            this.btn_cancel.Location = new System.Drawing.Point(125, 526);
+            this.btn_cancel.Location = new System.Drawing.Point(125, 573);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(94, 29);
             this.btn_cancel.TabIndex = 3;
@@ -115,21 +116,32 @@ namespace Media_Backup
             // 
             // grb_device
             // 
+            this.grb_device.Controls.Add(this.btn_refresh);
             this.grb_device.Controls.Add(this.lbl_device);
             this.grb_device.Controls.Add(this.cmb_devices);
             this.grb_device.Location = new System.Drawing.Point(12, 12);
             this.grb_device.Name = "grb_device";
-            this.grb_device.Size = new System.Drawing.Size(350, 137);
+            this.grb_device.Size = new System.Drawing.Size(350, 172);
             this.grb_device.TabIndex = 7;
             this.grb_device.TabStop = false;
             this.grb_device.Text = "Device choice";
+            // 
+            // btn_refresh
+            // 
+            this.btn_refresh.Location = new System.Drawing.Point(223, 125);
+            this.btn_refresh.Name = "btn_refresh";
+            this.btn_refresh.Size = new System.Drawing.Size(94, 29);
+            this.btn_refresh.TabIndex = 2;
+            this.btn_refresh.Text = "Refresh";
+            this.btn_refresh.UseVisualStyleBackColor = true;
+            this.btn_refresh.Click += new System.EventHandler(this.btn_refresh_Click);
             // 
             // grb_dest
             // 
             this.grb_dest.Controls.Add(this.lbl_dest_text);
             this.grb_dest.Controls.Add(this.lbl_dest_path);
             this.grb_dest.Controls.Add(this.btn_dest);
-            this.grb_dest.Location = new System.Drawing.Point(12, 309);
+            this.grb_dest.Location = new System.Drawing.Point(12, 356);
             this.grb_dest.Name = "grb_dest";
             this.grb_dest.Size = new System.Drawing.Size(350, 157);
             this.grb_dest.TabIndex = 8;
@@ -139,7 +151,7 @@ namespace Media_Backup
             // chb_metafiles
             // 
             this.chb_metafiles.AutoSize = true;
-            this.chb_metafiles.Location = new System.Drawing.Point(36, 482);
+            this.chb_metafiles.Location = new System.Drawing.Point(36, 529);
             this.chb_metafiles.Name = "chb_metafiles";
             this.chb_metafiles.Size = new System.Drawing.Size(254, 24);
             this.chb_metafiles.TabIndex = 9;
@@ -151,7 +163,7 @@ namespace Media_Backup
             this.grb_source.Controls.Add(this.lbl_source_text);
             this.grb_source.Controls.Add(this.lbl_source_path);
             this.grb_source.Controls.Add(this.btn_source);
-            this.grb_source.Location = new System.Drawing.Point(12, 158);
+            this.grb_source.Location = new System.Drawing.Point(12, 201);
             this.grb_source.Name = "grb_source";
             this.grb_source.Size = new System.Drawing.Size(350, 140);
             this.grb_source.TabIndex = 9;
@@ -190,7 +202,7 @@ namespace Media_Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 572);
+            this.ClientSize = new System.Drawing.Size(374, 627);
             this.Controls.Add(this.grb_source);
             this.Controls.Add(this.chb_metafiles);
             this.Controls.Add(this.grb_dest);
@@ -229,5 +241,6 @@ namespace Media_Backup
         private System.Windows.Forms.Label lbl_source_text;
         private System.Windows.Forms.Label lbl_source_path;
         private System.Windows.Forms.Button btn_source;
+        private System.Windows.Forms.Button btn_refresh;
     }
 }
