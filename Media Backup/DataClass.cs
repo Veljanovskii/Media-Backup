@@ -32,7 +32,6 @@ namespace Media_Backup
 
         public DataClass()
         {
-            NewFiles = new List<MediaDevices.MediaFileInfo>();
             MediaIndex = 0;
             MinutesRange = 2;
             TagIndexes = new List<int>();
@@ -91,6 +90,7 @@ namespace Media_Backup
                 .OrderBy(s => s.FullName)
                 .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
 
+            NewFiles = new List<MediaDevices.MediaFileInfo>();
             String folderPath = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
             Directory.CreateDirectory(folderPath);      // if directory already exists, nothing happens
 
@@ -277,6 +277,7 @@ namespace Media_Backup
 
         internal void FillMediaList(MainForm form)
         {
+            form.clb_media.Items.Clear();
             foreach (var item in NewFiles)
                 form.clb_media.Items.Add(item.Name);
         }

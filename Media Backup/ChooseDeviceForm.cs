@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaDevices;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +14,7 @@ namespace Media_Backup
     public partial class ChooseDeviceForm : Form
     {
         public MainForm Parent_Form;
-        public IEnumerable<MediaDevices.MediaDevice> Devices; 
+        public IEnumerable<MediaDevice> Devices;
 
         public ChooseDeviceForm(MainForm parent, IEnumerable<MediaDevices.MediaDevice> devices)
         {
@@ -23,7 +24,8 @@ namespace Media_Backup
         }
 
         private void ChooseDeviceForm_Load(object sender, EventArgs e)
-        {            
+        {
+            Parent_Form.proxy.SourceFolder = @"\Internal storage\DCIM\Camera";
             lbl_source_path.MaximumSize = new Size(320, 0);
             lbl_source_path.AutoSize = true;
             lbl_source_path.Text = @"\Internal storage\DCIM\Camera";
@@ -83,12 +85,8 @@ namespace Media_Backup
             {
                 Parent_Form.proxy.MediaDevice = Devices.ElementAt(cmb_devices.SelectedIndex);
 
-                if (Parent_Form.proxy.SourceFolder == null)
-                {
-                    Parent_Form.proxy.SourceFolder = @"\Internal storage\DCIM\Camera";
-                }
-                else
-                {
+                if (Parent_Form.proxy.SourceFolder != @"\Internal storage\DCIM\Camera")
+                {                    
                     String path = $@"\Internal storage" + Parent_Form.proxy.SourceFolder.Split(":")[1];
                     Parent_Form.proxy.SourceFolder = path;
                 }
@@ -114,7 +112,7 @@ namespace Media_Backup
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            this.DialogResult = DialogResult.Cancel;
         }
 
         private void btn_source_Click(object sender, EventArgs e)
@@ -139,8 +137,8 @@ namespace Media_Backup
 
         private void ChooseDeviceForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason != 0) 
-                Environment.Exit(0);
+            //if (e.CloseReason != 0) 
+            //    Environment.Exit(0);
         }
     }
 }

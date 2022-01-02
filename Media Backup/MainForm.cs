@@ -27,19 +27,19 @@ namespace Media_Backup
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {            
-            /*Choosing which device, if there are multiple*/
-            ChooseDeviceForm form = new ChooseDeviceForm(this, proxy.GetDevices());
-            var res = form.ShowDialog();
-            if (res == DialogResult.Cancel)
-                Environment.Exit(0);
-
-            this.Text = proxy.MediaDevice.FriendlyName;
-
+        {
             /*Trackbar settings*/
             trb_time.Minimum = 2;
             trb_time.Maximum = 120;
             trb_time.TickFrequency = 10;
+
+            /*Choosing which device, if there are multiple*/
+            ChooseDeviceForm form = new ChooseDeviceForm(this, proxy.GetDevices());
+            var res = form.ShowDialog();
+            if (res == DialogResult.Cancel)
+                return;
+
+            this.Text = proxy.MediaDevice.FriendlyName;           
 
             /*Accessing data from the device*/
             proxy.TransferMedia();
@@ -48,6 +48,21 @@ namespace Media_Backup
             proxy.FillMediaList(this);
 
             /*Media preview*/            
+            proxy.MediaPreview(this);
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChooseDeviceForm chooseDevice = new ChooseDeviceForm(this, proxy.GetDevices());
+            var res = chooseDevice.ShowDialog();
+            if (res == DialogResult.Cancel)
+                return;
+
+            this.Text = proxy.MediaDevice.FriendlyName;
+
+            proxy.TransferMedia();
+            proxy.FillMediaList(this);
+            proxy.MediaIndex = 0;
             proxy.MediaPreview(this);
         }
 
@@ -194,6 +209,6 @@ namespace Media_Backup
                 proxy._mp.Dispose();
             if (proxy._libVLC != null)
                 proxy._libVLC.Dispose();
-        }
+        }        
     }
 }

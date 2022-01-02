@@ -50,10 +50,13 @@ namespace Media_Backup
             this.clb_media = new System.Windows.Forms.CheckedListBox();
             this.chb_checkall = new System.Windows.Forms.CheckBox();
             this.btn_delete = new System.Windows.Forms.Button();
+            this.mnu_strip = new System.Windows.Forms.MenuStrip();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grb_preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcb_image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).BeginInit();
             this.grb_tags.SuspendLayout();
+            this.mnu_strip.SuspendLayout();
             this.SuspendLayout();
             // 
             // grb_preview
@@ -162,11 +165,11 @@ namespace Media_Backup
             // lbl_count
             // 
             this.lbl_count.AutoSize = true;
-            this.lbl_count.Location = new System.Drawing.Point(162, 27);
+            this.lbl_count.Location = new System.Drawing.Point(686, 34);
             this.lbl_count.Name = "lbl_count";
-            this.lbl_count.Size = new System.Drawing.Size(155, 20);
+            this.lbl_count.Size = new System.Drawing.Size(169, 20);
             this.lbl_count.TabIndex = 6;
-            this.lbl_count.Text = "_ new media detected";
+            this.lbl_count.Text = "No new media detected";
             // 
             // txt_tag
             // 
@@ -256,7 +259,7 @@ namespace Media_Backup
             // clb_media
             // 
             this.clb_media.FormattingEnabled = true;
-            this.clb_media.Location = new System.Drawing.Point(569, 361);
+            this.clb_media.Location = new System.Drawing.Point(569, 360);
             this.clb_media.Name = "clb_media";
             this.clb_media.Size = new System.Drawing.Size(350, 268);
             this.clb_media.TabIndex = 14;
@@ -266,7 +269,7 @@ namespace Media_Backup
             // chb_checkall
             // 
             this.chb_checkall.AutoSize = true;
-            this.chb_checkall.Location = new System.Drawing.Point(569, 331);
+            this.chb_checkall.Location = new System.Drawing.Point(569, 325);
             this.chb_checkall.Name = "chb_checkall";
             this.chb_checkall.Size = new System.Drawing.Size(90, 24);
             this.chb_checkall.TabIndex = 15;
@@ -284,6 +287,26 @@ namespace Media_Backup
             this.btn_delete.UseVisualStyleBackColor = true;
             this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
             // 
+            // mnu_strip
+            // 
+            this.mnu_strip.AutoSize = false;
+            this.mnu_strip.Dock = System.Windows.Forms.DockStyle.None;
+            this.mnu_strip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.mnu_strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem});
+            this.mnu_strip.Location = new System.Drawing.Point(0, 0);
+            this.mnu_strip.Name = "mnu_strip";
+            this.mnu_strip.Size = new System.Drawing.Size(200, 30);
+            this.mnu_strip.TabIndex = 17;
+            this.mnu_strip.Text = "menuStrip1";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(75, 26);
+            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -299,8 +322,10 @@ namespace Media_Backup
             this.Controls.Add(this.btn_right);
             this.Controls.Add(this.lbl_count);
             this.Controls.Add(this.grb_preview);
+            this.Controls.Add(this.mnu_strip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
+            this.MainMenuStrip = this.mnu_strip;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "MainForm";
@@ -315,6 +340,8 @@ namespace Media_Backup
             ((System.ComponentModel.ISupportInitialize)(this.trb_time)).EndInit();
             this.grb_tags.ResumeLayout(false);
             this.grb_tags.PerformLayout();
+            this.mnu_strip.ResumeLayout(false);
+            this.mnu_strip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,6 +369,8 @@ namespace Media_Backup
         public System.Windows.Forms.TextBox txt_tag;
         private System.Windows.Forms.CheckBox chb_checkall;
         private System.Windows.Forms.Button btn_delete;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        public System.Windows.Forms.MenuStrip mnu_strip;
     }
 }
 
