@@ -25,6 +25,7 @@ namespace Media_Backup
         public bool IsPlaying { get; set; }
         public int MinutesRange { get; set; }
         public List<int> TagIndexes { get; set; }
+        public List<string> MediaFormats { get; set; }
         public Bitmap image { get; set; }
         public LibVLC _libVLC;
         public MediaPlayer _mp;
@@ -36,6 +37,8 @@ namespace Media_Backup
             MinutesRange = 2;
             TagIndexes = new List<int>();
             IsPlaying = false;
+
+            MediaFormats = new List<string>();
         }
 
         public IEnumerable<MediaDevice> GetDevices()
@@ -73,6 +76,7 @@ namespace Media_Backup
             /*Accessing data from the device*/
             Cursor.Current = Cursors.WaitCursor;
             MediaDirectoryInfo photoDir = null;
+            NewFiles = new List<MediaDevices.MediaFileInfo>();
             try
             {
                 MediaDevice.Connect();
@@ -83,14 +87,14 @@ namespace Media_Backup
                 var result = MessageBox.Show(e.Message, "Unable to connect to the device", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 Cursor.Current = Cursors.Default;
                 if (result == DialogResult.OK)
-                    Environment.Exit(0);
+                    return;
             }
 
             var files = photoDir.EnumerateFiles("*.*", SearchOption.AllDirectories)
                 .OrderBy(s => s.FullName)
-                .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".mp4"));
+                .Where(s => MediaFormats.Contains(s.FullName.Substring(s.FullName.Length - 3, 3))
+                || MediaFormats.Contains(s.FullName.Substring(s.FullName.Length - 4, 4)));
 
-            NewFiles = new List<MediaDevices.MediaFileInfo>();
             String folderPath = Path.Combine(DestinationFolder, MediaDevice.FriendlyName);
             Directory.CreateDirectory(folderPath);      // if directory already exists, nothing happens
 

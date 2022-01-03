@@ -203,6 +203,19 @@ namespace Media_Backup
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (proxy.NewFiles != null) 
+            {
+                if (proxy.NewFiles.Count != 0)
+                {
+                    var result = MessageBox.Show("Are you sure you want to exit?", "Application closing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.No)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+
             if (proxy.videoView != null)
                 proxy.videoView.Dispose();
             if (proxy._mp != null)

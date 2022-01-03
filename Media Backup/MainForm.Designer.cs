@@ -165,6 +165,7 @@ namespace Media_Backup
             // lbl_count
             // 
             this.lbl_count.AutoSize = true;
+            this.lbl_count.ForeColor = System.Drawing.SystemColors.ControlText;
             this.lbl_count.Location = new System.Drawing.Point(686, 34);
             this.lbl_count.Name = "lbl_count";
             this.lbl_count.Size = new System.Drawing.Size(169, 20);
@@ -311,6 +312,7 @@ namespace Media_Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1017, 668);
             this.Controls.Add(this.btn_delete);
             this.Controls.Add(this.chb_checkall);
