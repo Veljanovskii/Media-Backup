@@ -237,6 +237,9 @@ namespace Media_Backup
 
         internal void DeleteCurrentMedia(MainForm form)
         {
+            if (NewFiles == null)
+                return;
+
             if (image != null)
                 image.Dispose();
 
@@ -288,6 +291,9 @@ namespace Media_Backup
 
         internal void FindInRange(MainForm form)
         {
+            if (NewFiles == null)
+                return;
+
             TagIndexes.Clear();
 
             for (int i = 0; i < NewFiles.Count; i++)

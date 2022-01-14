@@ -68,6 +68,9 @@ namespace Media_Backup
 
         private void btn_right_Click(object sender, EventArgs e)
         {
+            if (proxy.NewFiles == null)
+                return;
+
             if (proxy.MediaIndex < proxy.NewFiles.Count - 1)
             {
                 proxy.MediaIndex++;
@@ -77,6 +80,9 @@ namespace Media_Backup
 
         private void btn_left_Click(object sender, EventArgs e)
         {
+            if (proxy.NewFiles == null)
+                return;
+
             if (proxy.MediaIndex > 0)
             {
                 proxy.MediaIndex--;
@@ -86,12 +92,18 @@ namespace Media_Backup
 
         private void btn_end_Click(object sender, EventArgs e)
         {
+            if (proxy.NewFiles == null)
+                return;
+
             proxy.MediaIndex = proxy.NewFiles.Count - 1;
             proxy.MediaPreview(this);
         }
 
         private void btn_start_Click(object sender, EventArgs e)
         {
+            if (proxy.NewFiles == null)
+                return;
+
             proxy.MediaIndex = 0;
             proxy.MediaPreview(this);
         }
