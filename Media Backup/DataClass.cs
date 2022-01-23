@@ -194,7 +194,11 @@ namespace Media_Backup
             form.clb_media.Focus();
 
             /*Image preview*/
-            if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg"))
+            if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpg")
+                || NewFiles.ElementAt(MediaIndex).Name.EndsWith("png")
+                || NewFiles.ElementAt(MediaIndex).Name.EndsWith("jpeg")
+                || NewFiles.ElementAt(MediaIndex).Name.EndsWith("svg")
+                || NewFiles.ElementAt(MediaIndex).Name.EndsWith("gif"))
             {
                 /*Retrieve image*/
                 image = new Bitmap(path);
@@ -202,19 +206,18 @@ namespace Media_Backup
                 form.pcb_image.Visible = true;
 
                 /*Show image*/
-                if (image.Width == 4160)
+                if ((double)image.Width / image.Height > 1) 
                 {
                     form.pcb_image.Size = new Size(520, 390);
                     form.pcb_image.Location = new Point(6, 66);
-
                 }
-                else if (image.Width == 3120)
+                else
                 {
                     form.pcb_image.Size = new Size(305, 390);
                     form.pcb_image.Location = new Point(113, 66);
                 }
             }
-            else if (NewFiles.ElementAt(MediaIndex).Name.EndsWith("mp4"))
+            else
             {
                 /*VLC settings*/
 
