@@ -228,6 +228,9 @@ namespace Media_Backup
                 }
             }
 
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             if (proxy.videoView != null)
                 proxy.videoView.Dispose();
             if (proxy._mp != null)

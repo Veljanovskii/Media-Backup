@@ -240,7 +240,7 @@ namespace Media_Backup
 
         internal void DeleteCurrentMedia(MainForm form)
         {
-            if (NewFiles == null)
+            if (NewFiles == null || NewFiles.Count() == 0) 
                 return;
 
             if (image != null)
@@ -254,6 +254,8 @@ namespace Media_Backup
                 videoView = null;
                 _mp.Dispose();
             }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
             var path = Path.Combine(DestinationFolder, MediaDevice.FriendlyName, ExtractYear(NewFiles[MediaIndex]), NewFiles[MediaIndex].Name);
             File.Delete(path);
